@@ -1,3 +1,6 @@
 [submodule "backend"]
 	path = backend
 	url = git@codebase.helmholtz.cloud:m-team/ai/drift-monitoring-backend.git
+[submodule "client"]
+	path = client
+	url = git@codebase.helmholtz.cloud:m-team/ai/drift-monitoring-detector.git
