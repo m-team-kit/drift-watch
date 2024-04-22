@@ -1,0 +1,21 @@
+# See: https://docs.docker.com/compose/multiple-compose-files/merge/
+version: '3.8'
+
+services:
+
+  frontend:
+    restart: no
+    build:
+      target: testing
+
+  backend:
+    restart: no
+    build:
+      target: testing
+
+  database:
+    restart: always
+
+secrets:
+  database_password:
+    file: sandbox/secrets/app_database_password

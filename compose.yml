@@ -1,0 +1,41 @@
+# See: https://docs.docker.com/compose/multiple-compose-files/merge/
+version: "3.8"
+
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: frontend
+    depends_on:
+      - backend
+
+  backend:
+    container_name: backend
+    depends_on:
+      - database
+    build:
+      dockerfile: backend/Dockerfile
+    environment:
+      APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:?}
+      APP_DATABASE_HOST: database
+      APP_SECRETS_DIR: /run/secrets
+      APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
+      APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
+    secrets:
+      - source: database_password
+        target: app_database_password
+
+  database:
+    container_name: database
+    image: mongo:${APP_DATABASE_VERSION-6.0.3}
+    volumes:
+      - data-db:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${APP_DATABASE_USERNAME:?}
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/password
+    secrets:
+      - source: database_password
+        target: password
+
+volumes:
+  data-db:

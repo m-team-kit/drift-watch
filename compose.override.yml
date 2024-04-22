@@ -1,0 +1,31 @@
+# See: https://docs.docker.com/compose/multiple-compose-files/merge/
+version: "3.8"
+
+services:
+  frontend:
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./frontend:/srv
+
+  backend:
+    restart: unless-stopped
+    build:
+      target: development
+    ports:
+      - "5000:5000"
+      - "5678:5678"
+    volumes:
+      - ./backend:/srv
+    environment:
+      FLASK_DEBUG: 1
+
+  database:
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+
+secrets:
+  database_password:
+    file: sandbox/secrets/app_database_password

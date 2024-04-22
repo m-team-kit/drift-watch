@@ -1,0 +1,16 @@
+{
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.testing.pytestArgs": [
+        // "--numprocesses=auto",  To run tests in parallel
+        "tests"
+    ],
+    "cSpell.words": [
+        "argnames",
+        "dateiso",
+        "datetime",
+        "multitenancy",
+        "werkzeug"
+    ]
+}
