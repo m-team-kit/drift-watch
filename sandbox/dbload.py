@@ -1,14 +1,21 @@
 """Utility to load data into the database."""
 
 import argparse
+import json
 import logging
-from pymongo import MongoClient, timeout
 import os
+import pathlib
+
+from pymongo import MongoClient, timeout
 
 
 # Logger definition -------------------------------------------------
+FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 logger = logging.getLogger(__name__)
-format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Sandbox folders ---------------------------------------------------
+sandbox_database = pathlib.Path("sandbox/databases")
+sandbox_secrets = pathlib.Path("sandbox/secrets")
 
 
 # Script arguments definition ---------------------------------------
@@ -35,7 +42,7 @@ parser.add_argument(
     "--password_file",
     help="Secret file with database password (default: %(default)s)",
     type=str,
-    default="sandbox/secrets/app_database_password",
+    default=f"{sandbox_secrets}/app_database_password",
 )
 parser.add_argument(
     "--host",
@@ -50,6 +57,12 @@ parser.add_argument(
     default=os.getenv("APP_DATABASE_PORT", "27017"),
 )
 parser.add_argument(
+    "--database_name",
+    help="Database name (default: %(default)s)",
+    type=str,
+    default=os.getenv("APP_DATABASE_NAME", "drifts-data"),
+)
+parser.add_argument(
     "file",
     help="JSON file to load into the database",
     type=str,
@@ -57,6 +70,9 @@ parser.add_argument(
 
 
 def main(args):
+    """Main function."""
+    logging.basicConfig(format=FORMAT, level=args.verbosity)
+
     logger.info("Generating database client from environment.")
     with open(args.password_file, encoding="utf-8") as f:
         client = MongoClient(
@@ -66,13 +82,23 @@ def main(args):
             port=args.port,
         )
 
+    logger.info("Accessing database %s", args.database_name)
+    database = client[args.database_name]
+
     logger.info("Connecting to database %s", client)
     with timeout(seconds=3):  # Check the connection
         server_info = client.server_info()
         logger.debug("Server info: %s", server_info)
 
     logger.info("Loading data from %s", args.file)
-    raise NotImplementedError()  # TODO add code to load data
+    file_path = sandbox_database / f"{args.file}.json"
+    with open(file_path, "r", encoding="utf-8") as file:
+        for section in json.load(file):
+            collection = database[section["collection"]]
+            collection.insert_many(section["items"])
+
+    logger.info("Closing database connection.")
+    client.close()
 
 
 if __name__ == "__main__":
