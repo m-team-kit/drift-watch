@@ -14,7 +14,7 @@ services:
     depends_on:
       - database
     build:
-      dockerfile: backend/Dockerfile
+      context: backend
     environment:
       APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:?}
       APP_DATABASE_HOST: database
