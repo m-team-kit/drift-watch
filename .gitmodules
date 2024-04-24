@@ -4,3 +4,6 @@
 [submodule "client"]
 	path = client
 	url = git@codebase.helmholtz.cloud:m-team/ai/drift-monitoring-detector.git
+[submodule "frontend"]
+	path = frontend
+	url = https://codebase.helmholtz.cloud/ai-consultants-dkrz/drift_detection_front_end
