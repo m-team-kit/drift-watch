@@ -11,6 +11,8 @@ services:
     restart: no
     build:
       target: production
+    environment:
+      APP_DATABASE_NAME: test-data
 
   testing:
     restart: no
@@ -24,6 +26,11 @@ services:
 
   database:
     restart: no
+    volumes:
+      - ./sandbox/db-load.sh:/docker-entrypoint-initdb.d/db-load.sh:ro
+      - ./sandbox/database:/tmp/database
+    environment:
+      MONGO_INITDB_DATABASE: test-data
 
 secrets:
   database_password:

@@ -24,6 +24,7 @@ COPY --chown=sid:sid . /srv
 RUN python -m pip install -r requirements.txt
 
 # Change to non root user and expose port
+RUN chown -R sid:sid /srv
 USER sid
 
 # Define entrypoint and default command
