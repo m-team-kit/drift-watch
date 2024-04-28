@@ -1,8 +1,7 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
-version: '3.8'
+version: "3.8"
 
 services:
-
   frontend:
     restart: always
     build:
@@ -15,7 +14,12 @@ services:
 
   database:
     restart: always
+    volumes:
+      - data-db:/data/db
 
 secrets:
   database_password:
     file: secrets/app_database_password
+
+volumes:
+  data-db:

@@ -1,11 +1,8 @@
 """Pytest configuration for testing the backend."""
 
 # pylint: disable=redefined-outer-name
-import json
 import os
-import uuid
 
-import marshmallow as ma
 import requests
 from pytest import fixture
 
@@ -19,7 +16,7 @@ def base_url():
 @fixture(scope="class", name="response")
 def request(path, query, body):
     """Create a request object."""
-    yield requests.get(url=path, params=query, json=body)
+    yield requests.get(url=path, params=query, json=body, timeout=5)
 
 
 @fixture(scope="class")

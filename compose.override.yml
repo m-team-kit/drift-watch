@@ -17,7 +17,7 @@ services:
       - "5000:5000"
       - "5678:5678"
     volumes:
-      - ./backend:/srv
+      - ./backend/app:/srv/app
     environment:
       FLASK_DEBUG: 1
 
@@ -25,6 +25,8 @@ services:
     restart: unless-stopped
     ports:
       - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
 
 secrets:
   database_password:

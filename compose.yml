@@ -28,14 +28,9 @@ services:
   database:
     container_name: database
     image: mongo:${APP_DATABASE_VERSION-6.0.3}
-    volumes:
-      - data-db:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${APP_DATABASE_USERNAME:?}
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/password
     secrets:
       - source: database_password
         target: password
-
-volumes:
-  data-db:

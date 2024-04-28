@@ -1,20 +1,29 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
-version: '3.8'
+version: "3.8"
 
 services:
-
   frontend:
     restart: no
     build:
-      target: testing
+      target: production
 
   backend:
     restart: no
     build:
-      target: testing
+      target: production
+
+  testing:
+    restart: no
+    build:
+      context: tests
+    depends_on:
+      # - frontend
+      - backend
+    environment:
+      DRIFT_MONITOR_URL: http://backend:8000
 
   database:
-    restart: always
+    restart: no
 
 secrets:
   database_password:
