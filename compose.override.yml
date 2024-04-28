@@ -17,14 +17,21 @@ services:
       - "5000:5000"
       - "5678:5678"
     volumes:
-      - ./backend:/srv
+      - ./backend/app:/srv/app
     environment:
       FLASK_DEBUG: 1
+      APP_DATABASE_NAME: test-data
 
   database:
     restart: unless-stopped
     ports:
       - "27017:27017"
+    volumes:
+      - ./sandbox/db-load.sh:/docker-entrypoint-initdb.d/db-load.sh:ro
+      - ./sandbox/database:/tmp/database
+      - ./data/db:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: test-data
 
 secrets:
   database_password:
