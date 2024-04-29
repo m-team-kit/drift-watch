@@ -2,15 +2,27 @@
 version: "3.8"
 
 services:
+  reverse-proxy:
+    image: traefik:${APP_TRAEFIC_VERSION-v2.11}
+    environment:
+      DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
+    depends_on:
+      # - frontend
+      - backend
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./reverse-proxy:/etc/traefik
+
   frontend:
-    container_name: frontend
     build:
       context: frontend
     depends_on:
       - backend
 
   backend:
-    container_name: backend
     depends_on:
       - database
     build:
@@ -21,12 +33,13 @@ services:
       APP_SECRETS_DIR: /run/secrets
       APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
       APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
+      APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api"}] }'
+      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "http://${APP_DOMAIN_NAME:?}/api/specification.json" }'
     secrets:
       - source: database_password
         target: app_database_password
 
   database:
-    container_name: database
     image: mongo:${APP_DATABASE_VERSION-6.0.3}
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${APP_DATABASE_USERNAME:?}

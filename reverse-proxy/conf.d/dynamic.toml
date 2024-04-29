@@ -1,0 +1,24 @@
+# http routing section
+[http]
+[http.routers]
+# Define a connection between requests and services
+[http.routers.backend]
+rule = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api`)"
+# If the rule matches, applies the middleware
+middlewares = ["cors", "strip-prefix"]
+# If the rule matches, forward to the whoami service (declared below)
+service = "backend"
+
+[http.middlewares]
+# Define the cors middleware
+[http.middlewares.cors.headers]
+accesscontrolallowmethods = "GET,OPTIONS,PUT,POST,PATCH,DELETE"
+# Define the strip prefix middleware
+[http.middlewares.strip-prefix.stripprefix]
+prefixes = ["/api"]
+
+[http.services]
+# Define how to reach an existing service on our infrastructure
+[http.services.backend.loadBalancer]
+[[http.services.backend.loadBalancer.servers]]
+url = "http://backend:5000"

@@ -7,4 +7,4 @@ from pytest import fixture
 @fixture(scope="module")
 def path(base_url):
     """Return the path for the request."""
-    return f"{base_url}/drift"
+    return f"http://{base_url}/api/drift"

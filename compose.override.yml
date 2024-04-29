@@ -2,6 +2,11 @@
 version: "3.8"
 
 services:
+  reverse-proxy:
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+
   frontend:
     restart: unless-stopped
     ports:

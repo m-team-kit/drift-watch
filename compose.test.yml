@@ -2,6 +2,23 @@
 version: "3.8"
 
 services:
+  testing:
+    restart: no
+    build:
+      context: tests
+    depends_on:
+      reverse-proxy:
+        condition: service_healthy
+    environment:
+      TEST_BACKEND_ADDRESS: backend
+
+  reverse-proxy:
+    restart: no
+    healthcheck:
+      test: "traefik healthcheck"
+      start_period: 2s
+      interval: 2s
+
   frontend:
     restart: no
     build:
@@ -13,16 +30,6 @@ services:
       target: production
     environment:
       APP_DATABASE_NAME: test-data
-
-  testing:
-    restart: no
-    build:
-      context: tests
-    depends_on:
-      # - frontend
-      - backend
-    environment:
-      DRIFT_MONITOR_URL: http://backend:8000
 
   database:
     restart: no
