@@ -1,6 +1,6 @@
 """Pytest configuration for testing the client."""
 
-import os
+# pylint: disable=redefined-outer-name
 
 from drift_monitor import DriftMonitor
 import requests
@@ -10,7 +10,8 @@ from pytest import fixture
 @fixture(scope="function")
 def monitor(mytoken):
     """Return a DriftMonitor instance."""
-    return DriftMonitor("model_1", mytoken).__enter__()
+    with DriftMonitor("model_1", mytoken) as monitor:
+        yield monitor
 
 
 @fixture(scope="function")
