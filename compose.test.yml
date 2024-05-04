@@ -15,10 +15,6 @@ services:
 
   reverse-proxy:
     restart: no
-    healthcheck:
-      test: "traefik healthcheck"
-      start_period: 2s
-      interval: 2s
 
   frontend:
     restart: no

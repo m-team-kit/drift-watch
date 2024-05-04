@@ -8,7 +8,13 @@ services:
       DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
     depends_on:
       # - frontend
-      - backend
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: "traefik healthcheck"
+      interval: 5s
+      start_period: 1s
+
     ports:
       - "80:80"
       - "8080:8080"
@@ -24,7 +30,8 @@ services:
 
   backend:
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     build:
       context: backend
     environment:
@@ -38,6 +45,10 @@ services:
     secrets:
       - source: database_password
         target: app_database_password
+    healthcheck:
+      test: "curl -X GET --fail localhost:5000"
+      interval: 5s
+      start_period: 1s
 
   database:
     image: mongo:${APP_DATABASE_VERSION-6.0.3}
@@ -47,3 +58,7 @@ services:
     secrets:
       - source: database_password
         target: password
+    healthcheck:
+      test: mongosh --eval 'db.runCommand("ping").ok' localhost:27017 --quiet
+      interval: 5s
+      start_period: 5s
