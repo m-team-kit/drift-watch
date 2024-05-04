@@ -9,8 +9,9 @@ services:
     depends_on:
       reverse-proxy:
         condition: service_healthy
+    network_mode: "host"
     environment:
-      TEST_BACKEND_ADDRESS: backend
+      TEST_BACKEND_ADDRESS: localhost
 
   reverse-proxy:
     restart: no
