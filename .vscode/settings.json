@@ -16,6 +16,7 @@
         "dateiso",
         "datetime",
         "multitenancy",
+        "MYTOKEN",
         "werkzeug"
     ]
 }

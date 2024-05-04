@@ -8,9 +8,15 @@ from pytest import fixture
 
 
 @fixture(scope="session")
-def base_url():
+def endpoint():
     """Return the base URL for the API."""
-    return os.getenv("TEST_BACKEND_ADDRESS", "localhost")
+    return os.getenv("DRIFT_MONITOR_URL", "localhost")
+
+
+@fixture(scope="session")
+def mytoken():
+    """Return the auth token."""
+    return os.environ["DRIFT_MONITOR_TOKEN"]
 
 
 @fixture(scope="class", name="response")

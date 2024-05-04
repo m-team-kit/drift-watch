@@ -5,13 +5,14 @@ services:
   testing:
     restart: no
     build:
-      context: tests
+      dockerfile: Dockerfile.test
     depends_on:
       reverse-proxy:
         condition: service_healthy
     network_mode: "host"
     environment:
-      TEST_BACKEND_ADDRESS: localhost
+      DRIFT_MONITOR_URL: ${DRIFT_MONITOR_URL:-localhost}
+      DRIFT_MONITOR_TOKEN: ${DRIFT_MONITOR_TOKEN:?}
 
   reverse-proxy:
     restart: no
