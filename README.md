@@ -96,9 +96,30 @@ $ docker compose up -d database
 $ python -m pytest -x -n=auto tests
 ```
 
-The repository is configure so vscode can locate the tests and run them using the debugger.
-To obtain the test plan you can use the following command:
+The repository is configure so vscode can locate the tests and run them using
+the debugger. To obtain the test plan you can use the following command:
 
 ```bash
 python -m pytest --setup-plan tests
 ```
+
+## Reverse proxy
+
+The application is served using a reverse proxy. Both production and
+development environments use https. As ACME/letsencrypt does not support
+localhost certificates, on development, self-signed certificates are
+required. However, such certificates should not be added to the repository
+as they might generate security issues:
+
+https://letsencrypt.org/docs/certificates-for-localhost/#for-native-apps-talking-to-web-apps
+
+The best option is to generate the certificates before running the
+application. You can use the following command to generate the certificates:
+
+```bash
+$ ./sandbox/generate-certs.sh
+```
+
+More information on how to generate self-signed certificates can be found:
+
+https://letsencrypt.org/docs/certificates-for-localhost/#making-and-trusting-your-own-certificates
