@@ -2,6 +2,10 @@
 version: "3.8"
 
 services:
+  reverse-proxy:
+    volumes:
+      - ./letsencrypt:/letsencrypt
+
   frontend:
     restart: always
     build:

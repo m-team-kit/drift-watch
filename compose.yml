@@ -6,6 +6,11 @@ services:
     image: traefik:${APP_TRAEFIC_VERSION-v2.11}
     environment:
       DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
+      TRAEFIK_ENTRYPOINTS_WEB_ADDRESS: ":80"
+      TRAEFIK_ENTRYPOINTS_PING_ADDRESS: ":8082"
+      TRAEFIK_PROVIDERS_FILE_DIRECTORY: "/etc/traefik"
+      TRAEFIK_PING_ENTRYPOINT: "ping"
+      TRAEFIK_ACCESSLOG: "true"
     depends_on:
       # - frontend
       backend:
@@ -14,7 +19,6 @@ services:
       test: "traefik healthcheck"
       interval: 5s
       start_period: 1s
-
     ports:
       - "80:80"
       - "8080:8080"

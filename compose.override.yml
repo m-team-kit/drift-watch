@@ -4,6 +4,8 @@ version: "3.8"
 services:
   reverse-proxy:
     restart: unless-stopped
+    environment:
+      TRAEFIK_LOG_LEVEL: "DEBUG"
     ports:
       - "8082:8082"
 
