@@ -11,7 +11,7 @@ services:
         condition: service_healthy
     network_mode: "host"
     environment:
-      DRIFT_MONITOR_URL: ${DRIFT_MONITOR_URL:-localhost}
+      DRIFT_MONITOR_URL: ${DRIFT_MONITOR_URL:?}
       DRIFT_MONITOR_TOKEN: ${DRIFT_MONITOR_TOKEN:?}
 
   reverse-proxy:

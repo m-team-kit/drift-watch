@@ -10,7 +10,7 @@ from pytest import fixture
 @fixture(scope="session")
 def endpoint():
     """Return the base URL for the API."""
-    return os.getenv("DRIFT_MONITOR_URL", "localhost")
+    return os.environ["DRIFT_MONITOR_URL"]
 
 
 @fixture(scope="session")
@@ -23,7 +23,7 @@ def mytoken():
 def request(path, query, body):
     """Create a request object."""
     yield requests.get(
-        verify="sandbox/certificates/test.crt",
+        verify="sandbox/certificates/localhost.crt",
         url=path,
         params=query,
         json=body,
