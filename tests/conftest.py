@@ -10,21 +10,21 @@ from pytest import fixture
 @fixture(scope="session")
 def endpoint():
     """Return the base URL for the API."""
-    return os.environ["DRIFT_MONITOR_URL"]
+    return os.environ["APP_DOMAIN_NAME"]
 
 
 @fixture(scope="session")
 def mytoken():
     """Return the auth token."""
-    return os.environ["DRIFT_MONITOR_TOKEN"]
+    return os.environ["TEST_CLIENT_TOKEN"]
 
 
 @fixture(scope="class", name="response")
-def request(path, query, body):
+def request(endpoint, path, query, body):
     """Create a request object."""
     yield requests.get(
         verify="sandbox/certificates/localhost.crt",
-        url=path,
+        url=f"https://{endpoint}/{path}",
         params=query,
         json=body,
         timeout=5,
