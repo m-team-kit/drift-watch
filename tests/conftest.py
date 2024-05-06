@@ -23,6 +23,7 @@ def mytoken():
 def request(path, query, body):
     """Create a request object."""
     yield requests.get(
+        verify="sandbox/certificates/test.crt",
         url=path,
         params=query,
         json=body,

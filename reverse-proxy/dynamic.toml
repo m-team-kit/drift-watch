@@ -8,6 +8,10 @@
       middlewares = ["cors", "strip-prefix"]
       # If the rule matches, forward to the whoami service (declared below)
       service = "backend"
+      # Define the entrypoints to listen to
+      entryPoints = ["websecure"]
+      # Define the tls configuration to use
+      [http.routers.backend.tls]
 
 [http.middlewares]
   # Define the cors middleware
@@ -22,3 +26,15 @@
   [http.services.backend.loadBalancer]
     [[http.services.backend.loadBalancer.servers]]
       url = "http://backend:5000"
+
+[tls]
+  # Define the certificates to use for the websecure entrypoint
+  [[tls.certificates]]
+    certFile = "/etc/ssl/certs/localhost.crt"
+    keyFile  = "/etc/ssl/certs/localhost.key"
+  # Define the stores to use for the tls configuration
+  [tls.stores]
+    [tls.stores.default]
+      [tls.stores.default.defaultCertificate]
+        certFile = "/etc/ssl/certs/localhost.crt"
+        keyFile  = "/etc/ssl/certs/localhost.key"

@@ -7,6 +7,7 @@ services:
     environment:
       DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
       TRAEFIK_ENTRYPOINTS_WEB_ADDRESS: ":80"
+      TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS: ":443"
       TRAEFIK_ENTRYPOINTS_PING_ADDRESS: ":8082"
       TRAEFIK_PROVIDERS_FILE_DIRECTORY: "/etc/traefik"
       TRAEFIK_PING_ENTRYPOINT: "ping"
@@ -21,6 +22,7 @@ services:
       start_period: 1s
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -45,7 +47,7 @@ services:
       APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
       APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
       APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api"}] }'
-      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "http://${APP_DOMAIN_NAME:?}/api/specification.json" }'
+      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "https://${APP_DOMAIN_NAME:?}/api/specification.json" }'
     secrets:
       - source: database_password
         target: app_database_password
