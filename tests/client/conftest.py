@@ -8,9 +8,9 @@ from pytest import fixture
 
 
 @fixture(scope="function")
-def monitor(mytoken):
+def monitor():
     """Return a DriftMonitor instance."""
-    with DriftMonitor("model_1", mytoken) as monitor:
+    with DriftMonitor("model_1") as monitor:
         yield monitor
 
 
@@ -30,24 +30,28 @@ def exit_error(monitor):
 def concept_drift(request, monitor):
     """Add concept drift to the monitor."""
     if not hasattr(request, "param"):
-        return monitor.concept(True, {"threshold": 0.5})
+        request.param = {"threshold": 0.5}
     if request.param is None:
         return None
-    return monitor.concept(True, request.param)
+    monitor.concept(True, request.param)
+    return request.param
 
 
 @fixture(scope="function", autouse=True)
 def data_drift(request, monitor):
     """Add data drift to the monitor."""
     if not hasattr(request, "param"):
-        return monitor.data(True, {"threshold": 0.5})
+        request.param = {"threshold": 0.5}
     if request.param is None:
         return None
-    return monitor.data(True, request.param)
+    monitor.data(True, request.param)
+    return request.param
 
 
 @fixture(scope="function")
 def drift_info(endpoint, monitor):
     """Retrieves the drift information from the server."""
-    url = f"http://{endpoint}/drift/api/{monitor.drift['id']}"
-    return requests.get(url, timeout=5).json()
+    url = f"https://{endpoint}/api/drift/{monitor.drift['id']}"
+    response = requests.get(url, timeout=5, verify=False)
+    response.raise_for_status()
+    return response.json()
