@@ -2,9 +2,15 @@
 
 # pylint: disable=redefined-outer-name
 
-from drift_monitor import DriftMonitor
+from drift_monitor import DriftMonitor, register
 import requests
 from pytest import fixture
+
+
+@fixture(scope="session", autouse=True)
+def register_user():
+    """Register a user in the drift monitor."""
+    register(accept_terms=True)
 
 
 @fixture(scope="function")

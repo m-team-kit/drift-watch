@@ -12,9 +12,12 @@ services:
       APP_DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
       DRIFT_MONITOR_DOMAIN: ${DRIFT_MONITOR_DOMAIN:?}
       DRIFT_MONITOR_MYTOKEN: ${DRIFT_MONITOR_MYTOKEN:?}
+      TESTING: "true"
 
   reverse-proxy:
     restart: no
+    environment:
+      TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
 
   frontend:
     restart: no
