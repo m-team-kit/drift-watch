@@ -12,6 +12,7 @@
       entryPoints = ["websecure"]
       # Define the tls configuration to use
       [http.routers.backend.tls]
+        certresolver = "resolver0"
 
 [http.middlewares]
   # Define the cors middleware
@@ -26,15 +27,3 @@
   [http.services.backend.loadBalancer]
     [[http.services.backend.loadBalancer.servers]]
       url = "http://backend:5000"
-
-[tls]
-  # Define the certificates to use for the websecure entrypoint
-  [[tls.certificates]]
-    certFile = "/etc/ssl/certs/localhost.crt"
-    keyFile  = "/etc/ssl/certs/localhost.key"
-  # Define the stores to use for the tls configuration
-  [tls.stores]
-    [tls.stores.default]
-      [tls.stores.default.defaultCertificate]
-        certFile = "/etc/ssl/certs/localhost.crt"
-        keyFile  = "/etc/ssl/certs/localhost.key"

@@ -1,19 +1,12 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
-version: "3.8"
-
 services:
   reverse-proxy:
     restart: unless-stopped
     environment:
       TRAEFIK_LOG_LEVEL: "DEBUG"
-    # secrets:
-    #   - source: tls_certificate_key
-    #     target: localhost.key
+      TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
     ports:
       - "8082:8082"
-    volumes:
-      - ./sandbox/certificates/localhost.crt:/etc/ssl/certs/localhost.crt:ro
-      - ./sandbox/certificates/localhost.key:/etc/ssl/certs/localhost.key:ro
 
   frontend:
     restart: unless-stopped
@@ -49,5 +42,3 @@ services:
 secrets:
   database_password:
     file: sandbox/secrets/app_database_password
-  # tls_certificate_key:
-  #   file: sandbox/certificates/localhost.key
