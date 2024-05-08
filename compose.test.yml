@@ -9,8 +9,9 @@ services:
         condition: service_healthy
     network_mode: "host"
     environment:
-      DRIFT_MONITOR_URL: ${DRIFT_MONITOR_URL:?}
-      DRIFT_MONITOR_TOKEN: ${DRIFT_MONITOR_TOKEN:?}
+      APP_DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
+      DRIFT_MONITOR_DOMAIN: ${DRIFT_MONITOR_DOMAIN:?}
+      DRIFT_MONITOR_MYTOKEN: ${DRIFT_MONITOR_MYTOKEN:?}
 
   reverse-proxy:
     restart: no
