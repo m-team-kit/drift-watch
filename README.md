@@ -66,14 +66,14 @@ Provides endpoints for saving job status and get data with multiple filters.
 - [ ] Add reverse proxy for https and expose API doc.
 
 Create a conda environment, make sure conda is installed
-(https://conda.io/docs/user-guide/install/):
+(<https://conda.io/docs/user-guide/install/>):
 
 ```bash
-$ conda create --name drift-run python=3.11
-$ conda activate drift-run
-$ pip install -r backend/requirements.txt
-$ pip install -r requirements-dev.txt
-$ pip install -r requirements-test.txt
+conda create --name drift-run python=3.11
+conda activate drift-run
+pip install -r backend/requirements.txt
+pip install -r requirements-dev.txt
+pip install -r requirements-test.txt
 ```
 
 To run and debug the backend in local, you can use the following command:
@@ -92,8 +92,8 @@ For testing you need a database running to run the tests, you can use the follow
 commands to run bring up the database and then run the tests:
 
 ```bash
-$ docker compose up -d database
-$ python -m pytest -x -n=auto tests
+docker compose up -d database
+python -m pytest -x -n=auto tests
 ```
 
 The repository is configure so vscode can locate the tests and run them using
@@ -111,15 +111,37 @@ localhost certificates, on development, self-signed certificates are
 required. However, such certificates should not be added to the repository
 as they might generate security issues:
 
-https://letsencrypt.org/docs/certificates-for-localhost/#for-native-apps-talking-to-web-apps
+<https://letsencrypt.org/docs/certificates-for-localhost/#for-native-apps-talking-to-web-apps>
 
 The best option is to generate the certificates before running the
 application. You can use the following command to generate the certificates:
 
 ```bash
-$ ./sandbox/generate-certs.sh
+./sandbox/generate-certs.sh
 ```
 
 More information on how to generate self-signed certificates can be found:
 
-https://letsencrypt.org/docs/certificates-for-localhost/#making-and-trusting-your-own-certificates
+<https://letsencrypt.org/docs/certificates-for-localhost/#making-and-trusting-your-own-certificates>
+
+# Notes for dev
+
+To run in development:
+
+1. Copy the `.env.sample` file to `.env` and fill the required variables. Specially the `APP_DOMAIN_NAME`.
+2. Run the command `docker compose up --build reverse-proxy` to start the server.
+
+> It might be interesting to fix .env.sample to indicate what can be used for development.
+> Try different combinations of .env that would raise or not the call for a variable.
+
+# Notes for testing
+
+To run in local:
+
+1. Install the requirements for testing using the command `pip install -r requirements-test.txt`.
+2. Install the client using the command `pip install -e ./client`.
+
+To run with docker:
+
+1. Set the .env
+2. Run the command `docker compose -f compose.yml -f compose.test.yml run --rm --build testing`.
