@@ -1,6 +1,4 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
-version: "3.8"
-
 services:
   testing:
     restart: no
