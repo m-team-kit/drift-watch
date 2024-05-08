@@ -1,36 +1,76 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
-version: "3.8"
-
 services:
+  reverse-proxy:
+    image: traefik:${APP_TRAEFIC_VERSION-v2.11}
+    environment:
+      DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
+      TRAEFIK_API_INSECURE: "true"
+      TRAEFIK_ENTRYPOINTS_WEB_ADDRESS: ":80"
+      TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO: "websecure"
+      TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: "https"
+      TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS: ":443"
+      TRAEFIK_ENTRYPOINTS_PING_ADDRESS: ":8082"
+      TRAEFIK_PROVIDERS_FILE_DIRECTORY: "/etc/traefik"
+      TRAEFIK_PING_ENTRYPOINT: "ping"
+      TRAEFIK_ACCESSLOG: "true"
+      TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_HTTPCHALLENGE: "true"
+      TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_HTTPCHALLENGE_ENTRYPOINT: "web"
+      TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_EMAIL: ${APP_LETSENCRYPT_EMAIL:?}
+      TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_STORAGE: "/letsencrypt/acme.json"
+    depends_on:
+      # - frontend
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: "traefik healthcheck"
+      interval: 5s
+      start_period: 1s
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - ./letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./reverse-proxy:/etc/traefik
+
   frontend:
-    container_name: frontend
     build:
       context: frontend
     depends_on:
       - backend
 
   backend:
-    container_name: backend
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     build:
       context: backend
     environment:
-      APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:?}
+      APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
       APP_DATABASE_HOST: database
       APP_SECRETS_DIR: /run/secrets
       APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
       APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
+      APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api"}] }'
+      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "https://${APP_DOMAIN_NAME:?}/api/specification.json" }'
     secrets:
       - source: database_password
         target: app_database_password
+    healthcheck:
+      test: "curl -X GET --fail localhost:5000"
+      interval: 5s
+      start_period: 1s
 
   database:
-    container_name: database
     image: mongo:${APP_DATABASE_VERSION-6.0.3}
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${APP_DATABASE_USERNAME:?}
+      MONGO_INITDB_ROOT_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/password
     secrets:
       - source: database_password
         target: password
+    healthcheck:
+      test: mongosh --eval 'db.runCommand("ping").ok' localhost:27017 --quiet
+      interval: 5s
+      start_period: 5s

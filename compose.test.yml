@@ -1,7 +1,21 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
-version: "3.8"
-
 services:
+  testing:
+    restart: no
+    build:
+      dockerfile: Dockerfile.test
+    depends_on:
+      reverse-proxy:
+        condition: service_healthy
+    network_mode: "host"
+    environment:
+      APP_DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
+      DRIFT_MONITOR_DOMAIN: ${DRIFT_MONITOR_DOMAIN:?}
+      DRIFT_MONITOR_MYTOKEN: ${DRIFT_MONITOR_MYTOKEN:?}
+
+  reverse-proxy:
+    restart: no
+
   frontend:
     restart: no
     build:
@@ -14,20 +28,10 @@ services:
     environment:
       APP_DATABASE_NAME: test-data
 
-  testing:
-    restart: no
-    build:
-      context: tests
-    depends_on:
-      # - frontend
-      - backend
-    environment:
-      DRIFT_MONITOR_URL: http://backend:8000
-
   database:
     restart: no
     volumes:
-      - ./sandbox/db-load.sh:/docker-entrypoint-initdb.d/db-load.sh:ro
+      - ./sandbox/load-database.sh:/docker-entrypoint-initdb.d/load-db.sh:ro
       - ./sandbox/database:/tmp/database
     environment:
       MONGO_INITDB_DATABASE: test-data

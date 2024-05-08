@@ -11,11 +11,16 @@
         // "--numprocesses=auto",  To run tests in parallel
         "tests"
     ],
+    "evenBetterToml.formatter.indentEntries": true,
+    "evenBetterToml.formatter.indentTables": true,
+    "evenBetterToml.formatter.indentString": "  ",
+    "evenBetterToml.formatter.alignEntries": true,
     "cSpell.words": [
         "argnames",
         "dateiso",
         "datetime",
         "multitenancy",
+        "MYTOKEN",
         "werkzeug"
     ]
 }

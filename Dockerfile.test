@@ -20,13 +20,18 @@ WORKDIR /srv
 RUN useradd -m sid
 
 # Copy and install testing requirements
-COPY --chown=sid:sid . /srv
-RUN python -m pip install -r requirements.txt
+COPY --chown=sid:sid requirements-test.txt /srv
+RUN python -m pip install -r requirements-test.txt
 
-# Change to non root user and expose port
+# Copy and install client package
+COPY --chown=sid:sid client /srv/client
+RUN python -m pip install ./client
+
+# Copy tests and change to non root user
+COPY --chown=sid:sid tests /srv/tests
 RUN chown -R sid:sid /srv
 USER sid
 
 # Define entrypoint and default command
 ENTRYPOINT [ "python", "-m", "pytest" ]
-CMD [ "-n=auto", "." ]
+CMD [ "-n=auto", "tests" ]

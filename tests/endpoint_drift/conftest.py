@@ -5,6 +5,10 @@ from pytest import fixture
 
 
 @fixture(scope="module")
-def path(base_url):
+def path(request):
     """Return the path for the request."""
-    return f"{base_url}/drift"
+    if not hasattr(request, "param"):
+        return "api/drift"
+    if request.param is None:
+        return None
+    return request.param

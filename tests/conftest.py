@@ -8,15 +8,21 @@ from pytest import fixture
 
 
 @fixture(scope="session")
-def base_url():
+def endpoint():
     """Return the base URL for the API."""
-    return os.getenv("DRIFT_MONITOR_URL", "http://localhost:5000")
+    return os.environ["APP_DOMAIN_NAME"]
 
 
 @fixture(scope="class", name="response")
-def request(path, query, body):
+def request(endpoint, path, query, body):
     """Create a request object."""
-    yield requests.get(url=path, params=query, json=body, timeout=5)
+    yield requests.get(
+        url=f"https://{endpoint}/{path}",
+        params=query,
+        json=body,
+        timeout=5,
+        verify=False,
+    )
 
 
 @fixture(scope="class")

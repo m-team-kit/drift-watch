@@ -1,7 +1,13 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
-version: "3.8"
-
 services:
+  reverse-proxy:
+    restart: unless-stopped
+    environment:
+      TRAEFIK_LOG_LEVEL: "DEBUG"
+      TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
+    ports:
+      - "8082:8082"
+
   frontend:
     restart: unless-stopped
     ports:
@@ -27,7 +33,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./sandbox/db-load.sh:/docker-entrypoint-initdb.d/db-load.sh:ro
+      - ./sandbox/load-database.sh:/docker-entrypoint-initdb.d/load-db.sh:ro
       - ./sandbox/database:/tmp/database
       - ./data/db:/data/db
     environment:
