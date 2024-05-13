@@ -34,6 +34,15 @@ To install the client, you can use the following command:
 pip install drift-monitor
 ```
 
+### MyToken
+
+MyToken are special access token that can last for a long time. They are
+used to authenticate the client with the server. To create a MyToken, you
+can visit [mytoken.data.kit.edu](https://mytoken.data.kit.edu/home#mt).
+
+> We recommend that you create a MyToken that only has access to the
+> drift monitoring server.
+
 ## Drift Monitoring server
 
 A server that stores drift detection to simplify and monitor jobs.
