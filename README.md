@@ -1,147 +1,120 @@
-# Drift Detection
+# Drift Monitoring
+
+A simple to use library to monitor drift detection jobs.
+
+## TODO list
 
 - [ ] Add gitlab/github actions, depends on final repository location.
+- [ ] Add frontend to the integration tests and reverse proxy deps.
+- [ ] Publish the client to pypi.
+- [ ] Add database backup and restore services to compose.
+- [ ] Add extra utilities to the compose services (Graphana, etc.).
 
-# Detector container
+## Drift Monitoring client
 
-A container to run a script that runs drift detection on a given dataset.
-The script is a placeholder for the drift detection framework.
+A simple to use library to monitor drift detection jobs. Simply create a
+context in your script and use the `monitor` function to synchronize the
+job status with the monitoring server.
 
-- [ ] Is the drift detection framework agnostic to the model type?
-- [ ] Implement drift detection to use in "demo-advanced" project:
-- [ ] Should the container just run the script? Create template for script?
-- [ ] Access real data by accessing the database.
+```python
+from drift_monitoring import DriftMonitoring
 
-# Monitoring server
+with DriftMonitor("model_1", mytoken_secret) as monitor:
+    detected, detection_parameters = your_concept_detector()
+    monitor.concept(detected, detection_parameters)
+    detected, detection_parameters = your_data_detector()
+    monitor.data(detected, detection_parameters)
+```
 
-A server that monitors drift detection jobs and provides a dashboard
-to visualize the results.
+### Installation
+
+To install the client, you can use the following command:
+
+```bash
+pip install drift-monitor
+```
+
+## Drift Monitoring server
+
+A server that stores drift detection to simplify and monitor jobs.
+Provides a dashboard to visualize the results.
+The server is composed of multiple components:
+
+- A Mongo database to store the drift detection jobs and data.
+- A backend to handle authentication and database interface.
+- A frontend to visualize the drift detection jobs.
+- A reverse proxy to handle https and expose the API.
+
+### Run in Production
 
 Before starting the server, you need to generate the following secrets
 on `/secrets` folder:
 
 - app_database_password: Mongo database password.
 
-Once the secrets are generated, you can start the server by running:
+Once the secrets are generated, you also need to create and configure the
+`.env` file with the required variables. You can use the `.env.sample` file
+as a template.
+
+Once all the environment variables and secrets are set, you can start the
+server by running:
 
 ```bash
 docker compose -f compose.yml -f compose.prod.yml up --build
 ```
 
+This command will start, all containers. Database is stored in a docker
+volume, so it will persist between restarts. For the first time, a new
+certificate will be generated and stored in `/letsencrypt`, do not share
+this folder. Renewal of the certificate is done automatically.
+
+> Due to security issues, it is not possible to run in production mode as
+> "localhost". You need to set the `APP_DOMAIN_NAME` to a valid domain name.
+> See [edudns](https://edudns.services.fedcloud.eu/) as an example of an
+> university domain name.
+
 To stop the server, you can run:
 
 ```bash
-docker compose -f compose.yml -f compose.prod.yml down
+docker compose down
 ```
+
+### Run in Development
+
+Secrets are not required for development, the folder `/sandbox` contains
+a set of secrets and database items that are automatically loaded when
+using `compose.override.yml`. However, it is still required to create
+the `.env` file with the required variables and use a valid domain name.
+
+To start the server in development mode, you can run:
+
+```bash
+docker compose up --build
+```
+
+Certificates are generated automatically, from letsencrypt staging server
+to avoid rate limiting. The certificates are NOT mounted and stored in
+only in the reverse proxy container.
+
+To stop the server, you can run:
+
+```bash
+docker compose down
+```
+
+### Integration tests
 
 To test a component you can run compose with the test file, for example:
 
 ```bash
-docker compose -f compose.yml -f compose.test.yml run --build --rm backend
+docker compose -f compose.yml -f compose.test.yml run --build --rm testing
 ```
 
-Note that this step does not remove the database, use the stop commands
-to remove the database container to clean the persistent volumes.
-
-# Development
-
-## Frontend
-
-A Streamlit dashboard for visualizing feature drift, concept drift, and no drift.
-Fetches data from the Flask API using various endpoints.
-
-- [ ] Complete dashboard with all the required features.
-- [ ] Add here the features
-
-## Backend
-
-A Flask API that handles drift run data and job status.
-Contains swagger documentation (openapi 3.1) for above APIs.
-Saves drift run data to a MongoDB database.
-Provides endpoints for saving job status and get data with multiple filters.
-
-- [ ] Add pagination to the endpoints to avoid overloading the server.
-- [ ] Test in production (call the API from the browser).
-- [ ] Test in development (run debugger attached to the container).
-- [ ] Add reverse proxy for https and expose API doc.
-
-Create a conda environment, make sure conda is installed
-(<https://conda.io/docs/user-guide/install/>):
+It will run the tests on tests folder with services running as close to
+production as possible (except for using a staging certificate). Note that
+after testing is complete, the remove step does not stop the rest of services,
+to stop all services you can run:
 
 ```bash
-conda create --name drift-run python=3.11
-conda activate drift-run
-pip install -r backend/requirements.txt
-pip install -r requirements-dev.txt
-pip install -r requirements-test.txt
+docker compose down
 ```
-
-To run and debug the backend in local, you can use the following command:
-
-```bash
-export FLASK_APP=backend/autoapp:app
-python -m flask run <args>
-```
-
-You will need to export to the environment the application required variables,
-see the file `.env.sample` for the required variables. Additionally you can create
-your `.env` file and launch the application using the vscode debugger
-configuration at `.vscode/launch.json`.
-
-For testing you need a database running to run the tests, you can use the following
-commands to run bring up the database and then run the tests:
-
-```bash
-docker compose up -d database
-python -m pytest -x -n=auto tests
-```
-
-The repository is configure so vscode can locate the tests and run them using
-the debugger. To obtain the test plan you can use the following command:
-
-```bash
-python -m pytest --setup-plan tests
-```
-
-## Reverse proxy
-
-The application is served using a reverse proxy. Both production and
-development environments use https. As ACME/letsencrypt does not support
-localhost certificates, on development, self-signed certificates are
-required. However, such certificates should not be added to the repository
-as they might generate security issues:
-
-<https://letsencrypt.org/docs/certificates-for-localhost/#for-native-apps-talking-to-web-apps>
-
-The best option is to generate the certificates before running the
-application. You can use the following command to generate the certificates:
-
-```bash
-./sandbox/generate-certs.sh
-```
-
-More information on how to generate self-signed certificates can be found:
-
-<https://letsencrypt.org/docs/certificates-for-localhost/#making-and-trusting-your-own-certificates>
-
-# Notes for dev
-
-To run in development:
-
-1. Copy the `.env.sample` file to `.env` and fill the required variables. Specially the `APP_DOMAIN_NAME`.
-2. Run the command `docker compose up --build reverse-proxy` to start the server.
-
-> It might be interesting to fix .env.sample to indicate what can be used for development.
-> Try different combinations of .env that would raise or not the call for a variable.
-
-# Notes for testing
-
-To run in local:
-
-1. Install the requirements for testing using the command `pip install -r requirements-test.txt`.
-2. Install the client using the command `pip install -e ./client`.
-
-To run with docker:
-
-1. Set the .env
-2. Run the command `docker compose -f compose.yml -f compose.test.yml run --rm --build testing`.
