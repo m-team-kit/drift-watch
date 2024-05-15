@@ -12,8 +12,11 @@ services:
 
   frontend:
     restart: unless-stopped
+    build:
+      target: development
     ports:
-      - "8501:8501"
+      - "8502:8502"
+      - "5679:5678"
     volumes:
       - ./frontend:/srv
 

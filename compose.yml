@@ -18,7 +18,8 @@ services:
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_EMAIL: ${APP_LETSENCRYPT_EMAIL:?}
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_STORAGE: "/letsencrypt/acme.json"
     depends_on:
-      # - frontend
+      frontend:
+        condition: service_healthy
       backend:
         condition: service_healthy
     healthcheck:
@@ -37,7 +38,12 @@ services:
     build:
       context: frontend
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: "curl -X GET --fail localhost:8502"
+      interval: 5s
+      start_period: 1s
 
   backend:
     depends_on:
