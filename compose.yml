@@ -52,7 +52,6 @@ services:
       APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
       APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
       APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api"}] }'
-      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "https://${APP_DOMAIN_NAME:?}/api/specification.json" }'
     secrets:
       - source: database_password
         target: app_database_password

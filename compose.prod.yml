@@ -13,6 +13,8 @@ services:
     restart: always
     build:
       target: production
+    environment:
+      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "https://${APP_DOMAIN_NAME:?}/api/specification.json" }'
 
   database:
     restart: always

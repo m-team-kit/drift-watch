@@ -29,6 +29,7 @@ services:
     environment:
       FLASK_DEBUG: 1
       APP_DATABASE_NAME: test-data
+      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "http://localhost:5000/specification.json" }'
 
   database:
     restart: unless-stopped

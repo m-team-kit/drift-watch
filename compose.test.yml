@@ -29,6 +29,7 @@ services:
     build:
       target: production
     environment:
+      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "https://${APP_DOMAIN_NAME:?}/api/specification.json" }'
       APP_DATABASE_NAME: test-data
 
   database:
