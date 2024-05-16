@@ -1,7 +1,19 @@
 # http routing section
 [http]
   [http.routers]
-    # Define a connection between requests and services
+    # Define a connection between requests and frontend service
+    [http.routers.frontend]
+      rule = "Host(`{{ env `DOMAIN_NAME` }}`)"
+      # If the rule matches, applies the middleware
+      middlewares = ["cors"]
+      # If the rule matches, forward to the whoami service (declared below)
+      service = "frontend"
+      # Define the entrypoints to listen to
+      entryPoints = ["websecure"]
+      # Define the tls configuration to use
+      [http.routers.frontend.tls]
+        certresolver = "resolver0"
+    # Define a connection between requests and backend service
     [http.routers.backend]
       rule = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api`)"
       # If the rule matches, applies the middleware
@@ -23,7 +35,11 @@
     prefixes = ["/api"]
 
 [http.services]
-  # Define how to reach an existing service on our infrastructure
+  # Service to reach frontend 
+  [http.services.frontend.loadBalancer]
+    [[http.services.frontend.loadBalancer.servers]]
+      url = "http://frontend:8501"
+  # Service to reach backend
   [http.services.backend.loadBalancer]
     [[http.services.backend.loadBalancer.servers]]
       url = "http://backend:5000"
