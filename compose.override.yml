@@ -15,7 +15,7 @@ services:
     build:
       target: development
     ports:
-      - "8502:8502"
+      - "8501:8501"
       - "5679:5678"
     volumes:
       - ./frontend:/srv
@@ -32,7 +32,7 @@ services:
     environment:
       FLASK_DEBUG: 1
       APP_DATABASE_NAME: test-data
-      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "http://localhost:5000/specification.json" }'
+      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "http://${APP_DOMAIN_NAME:?}:5000/specification.json" }'
 
   database:
     restart: unless-stopped

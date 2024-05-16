@@ -6,8 +6,6 @@ services:
       DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
       TRAEFIK_API_INSECURE: "true"
       TRAEFIK_ENTRYPOINTS_WEB_ADDRESS: ":80"
-      TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO: "websecure"
-      TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: "https"
       TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS: ":443"
       TRAEFIK_ENTRYPOINTS_PING_ADDRESS: ":8082"
       TRAEFIK_PROVIDERS_FILE_DIRECTORY: "/etc/traefik"
@@ -37,11 +35,13 @@ services:
   frontend:
     build:
       context: frontend
+    environment:
+      DRIFT_MONITOR_HOST: backend
     depends_on:
       backend:
         condition: service_healthy
     healthcheck:
-      test: "curl -X GET --fail localhost:8502"
+      test: "curl -X GET --fail localhost:8501"
       interval: 5s
       start_period: 1s
 

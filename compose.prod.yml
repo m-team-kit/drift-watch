@@ -1,6 +1,9 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
 services:
   reverse-proxy:
+    environment:
+      TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO: "websecure"
+      TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: "https"
     volumes:
       - ./letsencrypt:/letsencrypt
 
