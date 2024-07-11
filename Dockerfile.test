@@ -34,4 +34,6 @@ USER sid
 
 # Define entrypoint and default command
 ENTRYPOINT [ "python", "-m", "pytest" ]
-CMD [ "-n=auto", "tests" ]
+# EGI OP does not support authentication in parallel
+# CMD [ "-n=auto", "tests" ]
+CMD [ "tests" ]
