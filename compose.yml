@@ -15,11 +15,6 @@ services:
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_HTTPCHALLENGE_ENTRYPOINT: "web"
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_EMAIL: ${APP_LETSENCRYPT_EMAIL:?}
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_STORAGE: "/letsencrypt/acme.json"
-    depends_on:
-      frontend:
-        condition: service_healthy
-      backend:
-        condition: service_healthy
     healthcheck:
       test: "traefik healthcheck"
       interval: 5s
