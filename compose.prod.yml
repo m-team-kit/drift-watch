@@ -5,7 +5,7 @@ services:
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO: "websecure"
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: "https"
     volumes:
-      - ./letsencrypt:/letsencrypt
+      - letsencrypt:/letsencrypt
 
   frontend:
     restart: always
@@ -29,4 +29,5 @@ secrets:
     file: secrets/app_database_password
 
 volumes:
+  letsencrypt:
   data-db:
