@@ -19,8 +19,13 @@
         "argnames",
         "dateiso",
         "datetime",
+        "healthcheck",
+        "letsencrypt",
+        "mongosh",
         "multitenancy",
-        "MYTOKEN",
+        "mytoken",
+        "redirections",
+        "traefik",
         "werkzeug"
     ]
 }
