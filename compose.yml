@@ -1,7 +1,7 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
 services:
   reverse-proxy:
-    image: traefik:${APP_TRAEFIK_VERSION-v2.11}
+    image: traefik:${APP_TRAEFIK_VERSION-v3.0}
     environment:
       DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
       TRAEFIK_API_INSECURE: "true"
@@ -15,10 +15,6 @@ services:
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_HTTPCHALLENGE_ENTRYPOINT: "web"
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_EMAIL: ${APP_LETSENCRYPT_EMAIL:?}
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_STORAGE: "/letsencrypt/acme.json"
-    healthcheck:
-      test: "traefik healthcheck"
-      interval: 5s
-      start_period: 1s
     ports:
       - "80:80"
       - "443:443"
@@ -30,36 +26,25 @@ services:
   frontend:
     build:
       context: frontend
-    environment:
-      DRIFT_MONITOR_HOST: backend
     depends_on:
-      backend:
-        condition: service_healthy
-    healthcheck:
-      test: "curl -X GET --fail localhost:8501"
-      interval: 5s
-      start_period: 1s
+      - backend-latest
 
-  backend:
-    depends_on:
-      database:
-        condition: service_healthy
+  backend-latest:
     build:
       context: backend
     environment:
+      APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api/latest"}] }'
+      APP_API_VERSION: latest
       APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
       APP_DATABASE_HOST: database
       APP_SECRETS_DIR: /run/secrets
       APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
       APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
-      APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api"}] }'
+    depends_on:
+      - database
     secrets:
       - source: database_password
         target: app_database_password
-    healthcheck:
-      test: "curl -X GET --fail localhost:5000"
-      interval: 5s
-      start_period: 1s
 
   database:
     image: mongo:${APP_DATABASE_VERSION-6.0.3}
@@ -69,7 +54,3 @@ services:
     secrets:
       - source: database_password
         target: password
-    healthcheck:
-      test: mongosh --eval 'db.runCommand("ping").ok' localhost:27017 --quiet
-      interval: 5s
-      start_period: 5s
