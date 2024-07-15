@@ -1,45 +1,59 @@
-# http routing section
-[http]
-  [http.routers]
-    # Define a connection between requests and frontend service
-    [http.routers.frontend]
-      rule = "Host(`{{ env `DOMAIN_NAME` }}`)"
-      # If the rule matches, applies the middleware
-      middlewares = ["cors"]
-      # If the rule matches, forward to the whoami service (declared below)
-      service = "frontend"
-      # Define the entrypoints to listen to
-      entryPoints = ["websecure"]
-      # Define the tls configuration to use
-      [http.routers.frontend.tls]
-        certresolver = "resolver0"
-    # Define a connection between requests and backend service
-    [http.routers.backend]
-      rule = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api`)"
-      # If the rule matches, applies the middleware
-      middlewares = ["cors", "strip-prefix"]
-      # If the rule matches, forward to the whoami service (declared below)
-      service = "backend"
-      # Define the entrypoints to listen to
-      entryPoints = ["websecure"]
-      # Define the tls configuration to use
-      [http.routers.backend.tls]
-        certresolver = "resolver0"
+# Routing -----------------------------------------------------------
+[http.routers.frontend]
+  rule        = "Host(`{{ env `DOMAIN_NAME` }}`)"
+  service     = "frontend"
+  entryPoints = ["web", "websecure"]
+[http.routers.frontend.tls]
+  certresolver = "resolver0"
+[http.routers.swagger-ui]
+  entryPoints = ["web", "websecure"]
+  rule        = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api`)"
+  middlewares = ["cors", "replace-api-path", "redirect-api-regex"]
+  service     = "swagger-ui"
+[http.routers.swagger-ui.tls]
+  certresolver = "resolver0"
+[http.routers.backend-latest]
+  rule        = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api/latest`)"
+  middlewares = ["replace-api-path", "redirect-api-regex", "replace-lts-path"]
+  service     = "backend-latest"
+  entryPoints = ["web", "websecure"]
+[http.routers.backend-latest.tls]
+  certresolver = "resolver0"
+[http.routers.backend-v1]
+  rule        = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api/v1`)"
+  middlewares = ["replace-api-path", "redirect-api-regex", "replace-v1-path"]
+  service     = "backend-v1"
+  entryPoints = ["web", "websecure"]
+[http.routers.backend-v1.tls]
+  certresolver = "resolver0"
 
-[http.middlewares]
-  # Define the cors middleware
-  [http.middlewares.cors.headers]
-    accesscontrolallowmethods = "GET,OPTIONS,PUT,POST,PATCH,DELETE"
-  # Define the strip prefix middleware
-  [http.middlewares.strip-prefix.stripprefix]
-    prefixes = ["/api"]
+# Middlewares -------------------------------------------------------
+[http.middlewares.cors.headers]
+  accesscontrolallowmethods = "GET,OPTIONS,PUT,POST,PATCH,DELETE"
+[http.middlewares.replace-api-path.replacePathRegex]
+  regex       = "^/api/(.*)"
+  replacement = "/$1"
+[http.middlewares.redirect-api-regex.redirectRegex]
+  regex       = "^(.*)/api$$"
+  replacement = "$1/api/"
+  permanent   = true
+[http.middlewares.replace-lts-path.replacePathRegex]
+  regex       = "^/latest/(.*)"
+  replacement = "/$1"
+[http.middlewares.replace-v1-path.replacePathRegex]
+  regex       = "^/v1/(.*)"
+  replacement = "/$1"
 
-[http.services]
-  # Service to reach frontend 
-  [http.services.frontend.loadBalancer]
-    [[http.services.frontend.loadBalancer.servers]]
-      url = "http://frontend:8501"
-  # Service to reach backend
-  [http.services.backend.loadBalancer]
-    [[http.services.backend.loadBalancer.servers]]
-      url = "http://backend:5000"
+# Services ----------------------------------------------------------
+[http.services.frontend.loadBalancer]
+[[http.services.frontend.loadBalancer.servers]]
+  url = "http://frontend:8501"
+[http.services.swagger-ui.loadBalancer]
+[[http.services.swagger-ui.loadBalancer.servers]]
+  url = "http://swagger-ui:8080"
+[http.services.backend-latest.loadBalancer]
+[[http.services.backend-latest.loadBalancer.servers]]
+  url = "http://backend-latest:5000"
+[http.services.backend-v1.loadBalancer]
+[[http.services.backend-v1.loadBalancer.servers]]
+  url = "http://backend-v1:5000"
