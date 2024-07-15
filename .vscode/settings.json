@@ -12,8 +12,6 @@
         "tests"
     ],
     "evenBetterToml.formatter.indentEntries": true,
-    "evenBetterToml.formatter.indentTables": true,
-    "evenBetterToml.formatter.indentString": "  ",
     "evenBetterToml.formatter.alignEntries": true,
     "cSpell.words": [
         "argnames",
