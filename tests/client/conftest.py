@@ -57,7 +57,7 @@ def data_drift(request, monitor):
 @fixture(scope="function")
 def drift_info(endpoint, monitor):
     """Retrieves the drift information from the server."""
-    url = f"https://{endpoint}/api/drift/{monitor.drift['id']}"
+    url = f"https://{endpoint}/api/latest/drift/{monitor.drift['id']}"
     response = requests.get(url, timeout=5, verify=False)
     response.raise_for_status()
     return response.json()

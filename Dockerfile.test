@@ -29,6 +29,7 @@ RUN python -m pip install ./client
 
 # Copy tests and change to non root user
 COPY --chown=sid:sid tests /srv/tests
+COPY --chown=sid:sid pytest.ini /srv
 RUN chown -R sid:sid /srv
 USER sid
 
