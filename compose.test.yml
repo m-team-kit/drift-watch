@@ -9,14 +9,16 @@ services:
         condition: service_healthy
       frontend:
         condition: service_healthy
-      backend:
+      backend-latest:
+        condition: service_healthy
+      backend-v1:
         condition: service_healthy
     network_mode: "host"
     environment:
+      TESTING: "true" # Client accept self-signed certificates
       APP_DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
       DRIFT_MONITOR_DOMAIN: ${DRIFT_MONITOR_DOMAIN:?}
       DRIFT_MONITOR_MYTOKEN: ${DRIFT_MONITOR_MYTOKEN:?}
-      TESTING: "true"
 
   reverse-proxy:
     restart: no
@@ -24,19 +26,66 @@ services:
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO: "websecure"
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: "https"
+    healthcheck:
+      test: "traefik healthcheck"
+      start_interval: 1s
+      start_period: 10s
 
   frontend:
     restart: no
     build:
       target: production
+    environment:
+      DRIFT_MONITOR_SCHEME: https
+      DRIFT_MONITOR_HOST: ${APP_DOMAIN_NAME:?}
+      DRIFT_MONITOR_PORT: 443
+      DRIFT_MONITOR_VERSION: latest
+    depends_on:
+      backend-latest:
+        condition: service_healthy
+    healthcheck:
+      test: "curl -X GET --fail localhost:8501"
+      start_interval: 1s
+      start_period: 10s
 
-  backend:
+  backend-latest:
     restart: no
     build:
       target: production
     environment:
-      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "https://${APP_DOMAIN_NAME:?}/api/specification.json" }'
       APP_DATABASE_NAME: test-data
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: "curl -X GET --fail localhost:5000"
+      start_interval: 1s
+      start_period: 10s
+
+  backend-v1:
+    restart: no
+    build:
+      context: backend # Change to backend_v1 submodule with v~=1
+      target: production
+    environment:
+      APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api/v1"}] }'
+      APP_API_VERSION: v1
+      APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
+      APP_DATABASE_HOST: database
+      APP_DATABASE_NAME: test-data
+      APP_SECRETS_DIR: /run/secrets
+      APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
+      APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
+    depends_on:
+      database:
+        condition: service_healthy
+    secrets:
+      - source: database_password
+        target: app_database_password
+    healthcheck:
+      test: "curl -X GET --fail localhost:5000"
+      start_interval: 1s
+      start_period: 10s
 
   database:
     restart: no
@@ -45,6 +94,10 @@ services:
       - ./sandbox/database:/tmp/database
     environment:
       MONGO_INITDB_DATABASE: test-data
+    healthcheck:
+      test: mongosh --eval 'db.runCommand("ping").ok' localhost:27017 --quiet
+      start_interval: 1s
+      start_period: 10s
 
 secrets:
   database_password:
