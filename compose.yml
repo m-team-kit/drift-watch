@@ -46,6 +46,23 @@ services:
       - source: database_password
         target: app_database_password
 
+  backend-v1:
+    build:
+      context: backend # Change to backend_v1 submodule with v~=1
+    environment:
+      APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api/v1"}] }'
+      APP_API_VERSION: v1
+      APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
+      APP_DATABASE_HOST: database
+      APP_SECRETS_DIR: /run/secrets
+      APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
+      APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
+    depends_on:
+      - database
+    secrets:
+      - source: database_password
+        target: app_database_password
+
   database:
     image: mongo:${APP_DATABASE_VERSION-6.0.3}
     environment:

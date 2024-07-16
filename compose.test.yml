@@ -65,23 +65,12 @@ services:
   backend-v1:
     restart: no
     build:
-      context: backend # Change to backend_v1 submodule with v~=1
       target: production
     environment:
-      APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api/v1"}] }'
-      APP_API_VERSION: v1
-      APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
-      APP_DATABASE_HOST: database
       APP_DATABASE_NAME: test-data
-      APP_SECRETS_DIR: /run/secrets
-      APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
-      APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
     depends_on:
       database:
         condition: service_healthy
-    secrets:
-      - source: database_password
-        target: app_database_password
     healthcheck:
       test: "curl -X GET --fail localhost:5000"
       start_interval: 1s
