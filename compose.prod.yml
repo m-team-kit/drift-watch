@@ -6,23 +6,75 @@ services:
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: "https"
     volumes:
       - letsencrypt:/letsencrypt
+    healthcheck:
+      test: "traefik healthcheck"
+      start_interval: 1s
+      start_period: 10s
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui:${APP_SWAGGER_UI_VERSION-v5.17.3}
+    environment:
+      URLS: >
+        [
+         {"name": "HTTPS-latest", "url": "https://${APP_DOMAIN_NAME:?}/api/latest/specification.json"}, 
+         {"name": "HTTPS-v1", "url": "https://${APP_DOMAIN_NAME:?}/api/v1/specification.json"}
+        ]
+    depends_on:
+      reverse-proxy:
+        condition: service_healthy
 
   frontend:
     restart: always
     build:
       target: production
+    environment:
+      DRIFT_MONITOR_SCHEME: https
+      DRIFT_MONITOR_HOST: ${APP_DOMAIN_NAME:?}
+      DRIFT_MONITOR_PORT: 443
+      DRIFT_MONITOR_VERSION: latest
+    depends_on:
+      backend-latest:
+        condition: service_healthy
+    healthcheck:
+      test: "curl -X GET --fail localhost:8501"
+      start_interval: 1s
+      start_period: 10s
 
-  backend:
+  backend-latest:
     restart: always
     build:
       target: production
-    environment:
-      APP_OPENAPI_SWAGGER_UI_CONFIG: '{ "url": "https://${APP_DOMAIN_NAME:?}/api/specification.json" }'
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: "curl -X GET --fail localhost:5000"
+      start_interval: 1s
+      start_period: 10s
+
+  backend-v1:
+    restart: always
+    build:
+      target: production
+    depends_on:
+      database:
+        condition: service_healthy
+    secrets:
+      - source: database_password
+        target: app_database_password
+    healthcheck:
+      test: "curl -X GET --fail localhost:5000"
+      start_interval: 1s
+      start_period: 10s
 
   database:
     restart: always
     volumes:
       - data-db:/data/db
+    healthcheck:
+      test: mongosh --eval 'db.runCommand("ping").ok' localhost:27017 --quiet
+      start_interval: 1s
+      start_period: 10s
 
 secrets:
   database_password:
