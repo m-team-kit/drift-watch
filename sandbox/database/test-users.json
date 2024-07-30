@@ -1,42 +1,42 @@
 [
-    { "_id": "00000000-0000-0002-0001-000000000001", "created_at": "2021-01-01T00:00:00Z", "subject": "user_1", "issuer": "issuer_1", "email": "user_1@issuer_1.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000001"
-        ] },
-    { "_id": "00000000-0000-0002-0001-000000000002", "created_at": "2021-01-02T00:00:00Z", "subject": "user_2", "issuer": "issuer_1", "email": "user_2@issuer_1.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000002"
-        ] },
-    { "_id": "00000000-0000-0002-0001-000000000003", "created_at": "2021-01-03T00:00:00Z", "subject": "user_3", "issuer": "issuer_1", "email": "user_3@issuer_1.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000003"
-        ] },
-    { "_id": "00000000-0000-0002-0001-000000000004", "created_at": "2021-01-04T00:00:00Z", "subject": "user_4", "issuer": "issuer_1", "email": "user_4@issuer_1.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000004"
-        ] },
-    { "_id": "00000000-0000-0002-0002-000000000001", "created_at": "2021-01-05T00:00:00Z", "subject": "user_1", "issuer": "issuer_2", "email": "user_1@issuer_2.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000005"
-        ] },
-    { "_id": "00000000-0000-0002-0002-000000000002", "created_at": "2021-01-06T00:00:00Z", "subject": "user_2", "issuer": "issuer_2", "email": "user_2@issuer_2.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000006"
-        ] },
-    { "_id": "00000000-0000-0002-0002-000000000003", "created_at": "2021-01-07T00:00:00Z", "subject": "user_3", "issuer": "issuer_2", "email": "user_3@issuer_2.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000007"
-        ] },
-    { "_id": "00000000-0000-0002-0002-000000000004", "created_at": "2021-01-08T00:00:00Z", "subject": "user_4", "issuer": "issuer_2", "email": "user_4@issuer_2.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000008"
-        ] },
-    { "_id": "00000000-0000-0002-0003-000000000001", "created_at": "2021-01-09T00:00:00Z", "subject": "user_1", "issuer": "issuer_3", "email": "user_1@issuer_3.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000009"
-        ] },
-    { "_id": "00000000-0000-0002-0003-000000000002", "created_at": "2021-01-10T00:00:00Z", "subject": "user_2", "issuer": "issuer_3", "email": "user_2@issuer_3.com",
-        "drift_ids": [
-            "00000000-0000-0001-0001-000000000010"
-        ] }
+    { "_id": "00000000-0000-0003-0001-000000000001", "created_at": "2021-01-01T00:00:00Z",
+        "subject": "user_1", "issuer": "issuer_1",
+        "email": "user_1@issuer_1.com"
+    },
+    { "_id": "00000000-0000-0003-0001-000000000002", "created_at": "2021-01-02T00:00:00Z",
+        "subject": "user_2", "issuer": "issuer_1",
+        "email": "user_2@issuer_1.com"
+    },
+    { "_id": "00000000-0000-0003-0001-000000000003", "created_at": "2021-01-03T00:00:00Z",
+        "subject": "user_3", "issuer": "issuer_1",
+        "email": "user_3@issuer_1.com"
+    },
+    { "_id": "00000000-0000-0003-0001-000000000004", "created_at": "2021-01-04T00:00:00Z",
+        "subject": "user_4", "issuer": "issuer_1",
+        "email": "user_4@issuer_1.com"
+    },
+    { "_id": "00000000-0000-0003-0002-000000000001", "created_at": "2021-01-05T00:00:00Z",
+        "subject": "user_1", "issuer": "issuer_2",
+        "email": "user_1@issuer_2.com"
+    },
+    { "_id": "00000000-0000-0003-0002-000000000002", "created_at": "2021-01-06T00:00:00Z",
+        "subject": "user_2", "issuer": "issuer_2",
+        "email": "user_2@issuer_2.com"
+    },
+    { "_id": "00000000-0000-0003-0002-000000000003", "created_at": "2021-01-07T00:00:00Z",
+        "subject": "user_3", "issuer": "issuer_2",
+        "email": "user_3@issuer_2.com"
+    },
+    { "_id": "00000000-0000-0003-0002-000000000004", "created_at": "2021-01-08T00:00:00Z",
+        "subject": "user_4", "issuer": "issuer_2",
+        "email": "user_4@issuer_2.com"
+    },
+    { "_id": "00000000-0000-0003-0003-000000000001", "created_at": "2021-01-09T00:00:00Z",
+        "subject": "user_1", "issuer": "issuer_3",
+        "email": "user_1@issuer_3.com"
+    },
+    { "_id": "00000000-0000-0003-0003-000000000002", "created_at": "2021-01-10T00:00:00Z",
+        "subject": "user_2", "issuer": "issuer_3",
+        "email": "user_2@issuer_3.com"
+    }
 ]
