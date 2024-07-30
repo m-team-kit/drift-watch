@@ -8,7 +8,7 @@ from pytest import fixture
 def path(request):
     """Return the path for the request."""
     if not hasattr(request, "param"):
-        return "api/latest/drift"
+        return "api/latest/experiment"
     if request.param is None:
         return None
     return request.param
