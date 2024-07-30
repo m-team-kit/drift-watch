@@ -1,0 +1,8 @@
+[
+    { "_id": "00000000-0000-0004-0002-000000000001", "datetime": "2021-01-01T00:00:00Z",
+        "job_status": "Completed",
+        "model": "model_1",
+        "concept_drift": { "drift": true, "parameters": { "feature1": 0.05, "feature2": 0.1 } },
+        "data_drift": { "drift": true, "parameters": { "feature3": 0.02, "feature4": 0.08 } }
+    }
+]
