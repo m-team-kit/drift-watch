@@ -105,6 +105,10 @@ Certificates are generated automatically, from letsencrypt staging server
 to avoid rate limiting. The certificates are NOT mounted and stored in
 only in the reverse proxy container.
 
+After the containers are running, you can access when running in development
+mode, you need to attache a debugger to the backend and frontend services
+to start the python execution.
+
 To stop the server, you can run:
 
 ```bash
