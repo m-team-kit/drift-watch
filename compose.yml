@@ -23,6 +23,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./reverse-proxy:/etc/traefik
 
+  swagger-ui:
+    image: swaggerapi/swagger-ui:${APP_SWAGGER_UI_VERSION-v5.17.3}
+    depends_on:
+      - reverse-proxy
+      - backend-latest
+      - backend-v1
+
   frontend:
     build:
       context: frontend
@@ -64,7 +71,7 @@ services:
         target: app_database_password
 
   database:
-    image: mongo:${APP_DATABASE_VERSION-6.0.3}
+    image: mongo:${APP_DATABASE_VERSION-8.0}
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/password

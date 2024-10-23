@@ -11,15 +11,12 @@ services:
       - ./letsencrypt:/letsencrypt
 
   swagger-ui:
-    image: swaggerapi/swagger-ui:${APP_SWAGGER_UI_VERSION-v5.17.3}
     environment:
       URLS: >
         [
          {"name": "HTTPS-latest", "url": "https://${APP_DOMAIN_NAME:?}/api/latest/specification.json"}, 
          {"name": "HTTPS-v1", "url": "https://${APP_DOMAIN_NAME:?}/api/v1/specification.json"}
         ]
-    depends_on:
-      - reverse-proxy
 
   frontend:
     restart: unless-stopped
