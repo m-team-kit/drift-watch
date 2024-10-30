@@ -2,9 +2,30 @@
 
 # pylint: disable=redefined-outer-name
 
-from drift_monitor import DriftMonitor, register
-import requests
+import os
+import uuid
+
+from drift_monitor import DriftMonitor, new_experiment, register
+from pymongo import MongoClient
 from pytest import fixture
+
+
+@fixture(scope="session")
+def db_client():
+    """Return a MongoDB client."""
+    # Secret from sandbox, do not use same in production
+    return MongoClient(
+        host=os.getenv("APP_DATABASE_HOST", "localhost"),
+        port=int(os.getenv("APP_DATABASE_PORT", "27017")),
+        username=os.getenv("APP_DATABASE_USERNAME", "user-default"),
+        password="4a9ac8715296c9fbc91efa5216bf6814",
+    )
+
+
+@fixture(scope="session")
+def db(db_client):
+    """Return the database."""
+    return db_client["test-data"]
 
 
 @fixture(scope="session", autouse=True)
@@ -13,10 +34,18 @@ def register_user():
     register(accept_terms=True)
 
 
+@fixture(scope="session")
+def experiment():
+    """Create and return an experiment."""
+    experiment_name = f"experiment_{uuid.uuid4().hex}"
+    description = "Some experiment description"
+    return new_experiment(experiment_name, description)
+
+
 @fixture(scope="function")
-def monitor():
+def monitor(experiment):
     """Return a DriftMonitor instance."""
-    with DriftMonitor("model_1") as monitor:
+    with DriftMonitor(experiment["name"], "model_1") as monitor:
         yield monitor
 
 
@@ -52,12 +81,3 @@ def data_drift(request, monitor):
         return None
     monitor.data(True, request.param)
     return request.param
-
-
-@fixture(scope="function")
-def drift_info(endpoint, monitor):
-    """Retrieves the drift information from the server."""
-    url = f"https://{endpoint}/api/latest/drift/{monitor.drift['id']}"
-    response = requests.get(url, timeout=5, verify=False)
-    response.raise_for_status()
-    return response.json()

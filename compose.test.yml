@@ -17,6 +17,8 @@ services:
     environment:
       TESTING: "true" # Client accept self-signed certificates
       APP_DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
+      APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
+      APP_DATABASE_HOST: database
       DRIFT_MONITOR_URL: ${DRIFT_MONITOR_URL:?}
       DRIFT_MONITOR_MYTOKEN: ${DRIFT_MONITOR_MYTOKEN:?}
 
@@ -78,6 +80,8 @@ services:
 
   database:
     restart: no
+    ports:
+      - "27017:27017"
     volumes:
       - ./sandbox/load-database.sh:/docker-entrypoint-initdb.d/load-db.sh:ro
       - ./sandbox/database:/tmp/database
