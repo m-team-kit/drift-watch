@@ -17,7 +17,7 @@ services:
     environment:
       TESTING: "true" # Client accept self-signed certificates
       APP_DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
-      DRIFT_MONITOR_DOMAIN: ${DRIFT_MONITOR_DOMAIN:?}
+      DRIFT_MONITOR_URL: ${DRIFT_MONITOR_URL:?}
       DRIFT_MONITOR_MYTOKEN: ${DRIFT_MONITOR_MYTOKEN:?}
 
   reverse-proxy:
