@@ -6,7 +6,6 @@ A simple to use library to monitor drift detection jobs.
 
 - [ ] Add gitlab/github actions, depends on final repository location.
 - [ ] Add frontend to the integration tests and reverse proxy deps.
-- [ ] Publish the client to pypi.
 - [ ] Add database backup and restore services to compose.
 - [ ] Add extra utilities to the compose services (Graphana, etc.).
 
@@ -19,7 +18,7 @@ job status with the monitoring server.
 ```python
 from drift_monitoring import DriftMonitoring
 
-with DriftMonitor("model_1", mytoken_secret) as monitor:
+with DriftMonitor(experiment_name, "model_1") as monitor:
     detected, detection_parameters = your_concept_detector()
     monitor.concept(detected, detection_parameters)
     detected, detection_parameters = your_data_detector()
