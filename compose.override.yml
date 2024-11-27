@@ -68,6 +68,28 @@ services:
     environment:
       MONGO_INITDB_DATABASE: test-data
 
+
+  grafana:
+    restart: unless-stopped
+    image: grafana/grafana:${GRAFANA_VERSION-latest}
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      # - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana/      
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
+    # depends_on:
+    #   - backend-latest
+
+
+volumes:
+  grafana_data:
+
+
 secrets:
   database_password:
     file: sandbox/secrets/app_database_password
