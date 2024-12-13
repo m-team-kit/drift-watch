@@ -1,6 +1,6 @@
 # ================================== BUILDER ===================================
 ARG  PYTHON_VERSION=3.11
-FROM python:${PYTHON_VERSION} as build
+FROM python:${PYTHON_VERSION} AS build
 
 # Environments to reduce size of docker image
 ENV DEBIAN_FRONTEND=noninteractive
