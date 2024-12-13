@@ -2,30 +2,10 @@
 
 # pylint: disable=redefined-outer-name
 
-import os
 import uuid
 
 from drift_monitor import DriftMonitor, new_experiment, register
-from pymongo import MongoClient
 from pytest import fixture
-
-
-@fixture(scope="session")
-def db_client():
-    """Return a MongoDB client."""
-    # Secret from sandbox, do not use same in production
-    return MongoClient(
-        host=os.getenv("APP_DATABASE_HOST", "localhost"),
-        port=int(os.getenv("APP_DATABASE_PORT", "27017")),
-        username=os.getenv("APP_DATABASE_USERNAME", "user-default"),
-        password="4a9ac8715296c9fbc91efa5216bf6814",
-    )
-
-
-@fixture(scope="session")
-def db(db_client):
-    """Return the database."""
-    return db_client["test-data"]
 
 
 @fixture(scope="session", autouse=True)
