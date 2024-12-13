@@ -7,11 +7,6 @@ mongoimport --jsonArray \
 
 mongoimport --jsonArray \
     --db test-data \
-    --collection app.groups \
-    --file tmp/database/test-groups.json
-
-mongoimport --jsonArray \
-    --db test-data \
     --collection app.blueprints.user \
     --file tmp/database/test-users.json
 
