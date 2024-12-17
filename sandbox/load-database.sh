@@ -19,3 +19,13 @@ mongoimport --jsonArray \
     --db test-data \
     --collection app.00000000-0000-0001-0001-000000000002 \
     --file tmp/database/test-02-drifts.json
+
+mongoimport --jsonArray \
+    --db test-data \
+    --collection app.00000000-0000-0001-0001-000000000003 \
+    --file tmp/database/test-03-drifts.json
+
+mongoimport --jsonArray \
+    --db test-data \
+    --collection app.00000000-0000-0001-0001-000000000004 \
+    --file tmp/database/test-04-drifts.json

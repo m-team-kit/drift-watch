@@ -1,34 +1,64 @@
 [
-    { "_id": "00000000-0000-0001-0001-000000000001",
-        "created_at": "2021-01-01T00:00:00Z",
+    {
+        "_id": "00000000-0000-0001-0001-000000000001",
+        "created_at": "2020-01-01T00:00:00Z",
         "name": "experiment_1",
+        "description": "Experiment 1 description",
+        "public": false,
+        "permissions": [
+            { "level": "Manage", "entity": "urn:mace:egi.eu:group:vo_example1:role=manage#x.0" },
+            { "level": "Edit", "entity": "urn:mace:egi.eu:group:vo_example1:role=edit#x.0" },
+            { "level": "Read", "entity": "urn:mace:egi.eu:group:vo_example1:role=read#x.0" },
+            { "level": "Manage", "entity": "00000000-0000-0003-0001-000000000001" },
+            { "level": "Edit", "entity": "00000000-0000-0003-0001-000000000002" },
+            { "level": "Read", "entity": "00000000-0000-0003-0001-000000000003" }
+        ]
+    },
+    {
+        "_id": "00000000-0000-0001-0001-000000000002",
+        "created_at": "2021-01-01T00:00:00Z",
+        "name": "experiment_2",
+        "description": "Experiment 2 description",
         "public": true,
         "permissions": [
-            { "Manage": "00000000-0000-0002-0001-000000000001" },
-            { "Edit": "00000000-0000-0002-0001-000000000002" },
-            { "Read": "00000000-0000-0002-0001-000000000003" },
-            { "Manage": "00000000-0000-0003-0001-000000000001" }
+            { "level": "Manage", "entity": "urn:mace:egi.eu:group:vo_example1:role=manage#x.0" },
+            { "level": "Edit", "entity": "urn:mace:egi.eu:group:vo_example1:role=edit#x.0" },
+            { "level": "Read", "entity": "urn:mace:egi.eu:group:vo_example1:role=read#x.0" },
+            { "level": "Manage", "entity": "00000000-0000-0003-0001-000000000001" },
+            { "level": "Edit", "entity": "00000000-0000-0003-0001-000000000002" },
+            { "level": "Read", "entity": "00000000-0000-0003-0001-000000000003" }
         ]
     },
-    { "_id": "00000000-0000-0001-0001-000000000002",
+    {
+        "_id": "00000000-0000-0001-0001-000000000003",
         "created_at": "2021-01-02T00:00:00Z",
-        "name": "experiment_2",
-        "permissions": [
-            { "Manage": "00000000-0000-0003-0001-000000000002" }
-        ]
-    },
-    { "_id": "00000000-0000-0001-0001-000000000003",
-        "created_at": "2021-01-03T00:00:00Z",
         "name": "experiment_3",
+        "description": "Experiment 3 description",
+        "public": false,
         "permissions": [
-            { "Manage": "00000000-0000-0003-0001-000000000002" }
+            { "level": "Manage", "entity": "urn:mace:egi.eu:group:vo_example1:role=manage#x.0" },
+            { "level": "Edit", "entity": "urn:mace:egi.eu:group:vo_example1:role=edit#x.0" },
+            { "level": "Read", "entity": "urn:mace:egi.eu:group:vo_example1:role=read#x.0" },
+            { "level": "Manage", "entity": "00000000-0000-0003-0001-000000000001" },
+            { "level": "Edit", "entity": "00000000-0000-0003-0001-000000000002" },
+            { "level": "Read", "entity": "00000000-0000-0003-0001-000000000003" }
         ]
     },
-    { "_id": "00000000-0000-0001-0001-000000000004",
-        "created_at": "2021-01-04T00:00:00Z",
+    {
+        "_id": "00000000-0000-0001-0001-000000000004",
+        "created_at": "2022-01-01T00:00:00Z",
         "name": "experiment_4",
+        "description": "Experiment 4 description",
+        "public": false,
         "permissions": [
-            { "Manage": "00000000-0000-0003-0001-000000000002" }
+            { "level": "Manage", "entity": "urn:mace:egi.eu:group:vo_example1:role=manage#x.0" },
+            { "level": "Edit", "entity": "urn:mace:egi.eu:group:vo_example1:role=edit#x.0" },
+            { "level": "Read", "entity": "urn:mace:egi.eu:group:vo_example1:role=read#x.0" },
+            { "level": "Manage", "entity": "00000000-0000-0003-0001-000000000001" },
+            { "level": "Edit", "entity": "00000000-0000-0003-0001-000000000002" },
+            { "level": "Read", "entity": "00000000-0000-0003-0001-000000000003" }
         ]
     }
 ]
+
+
