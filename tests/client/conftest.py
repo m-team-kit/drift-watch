@@ -23,9 +23,16 @@ def experiment():
 
 
 @fixture(scope="function")
-def monitor(experiment):
+def tags(request):
+    """Return the tags for the monitor."""
+    default_tags = ["drift_type", "method_name"]
+    return request.param if hasattr(request, "param") else default_tags
+
+
+@fixture(scope="function")
+def monitor(experiment, tags):
     """Return a DriftMonitor instance."""
-    with DriftMonitor(experiment["name"], "model_1") as monitor:
+    with DriftMonitor(experiment.name, "model_1", tags) as monitor:
         yield monitor
 
 
@@ -41,23 +48,7 @@ def exit_error(monitor):
     return monitor.__exit__(ValueError, None, None)
 
 
-@fixture(scope="function", autouse=True)
-def concept_drift(request, monitor):
+@fixture(scope="function")
+def drift(monitor, drift_detected, parameters):
     """Add concept drift to the monitor."""
-    if not hasattr(request, "param"):
-        request.param = {"threshold": 0.5}
-    if request.param is None:
-        return None
-    monitor.concept(True, request.param)
-    return request.param
-
-
-@fixture(scope="function", autouse=True)
-def data_drift(request, monitor):
-    """Add data drift to the monitor."""
-    if not hasattr(request, "param"):
-        request.param = {"threshold": 0.5}
-    if request.param is None:
-        return None
-    monitor.data(True, request.param)
-    return request.param
+    return monitor(drift_detected, parameters)
