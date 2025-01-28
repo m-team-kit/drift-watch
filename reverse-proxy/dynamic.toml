@@ -7,21 +7,21 @@
   certresolver = "resolver0"
 [http.routers.swagger-ui]
   rule        = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api`)"
-  middlewares = ["cors", "replace-api-path", "redirect-api-regex"]
+  middlewares = ["cors", "replace-api", "redirect-api"]
   service     = "swagger-ui"
   entryPoints = ["web", "websecure"]
 [http.routers.swagger-ui.tls]
   certresolver = "resolver0"
 [http.routers.backend-latest]
   rule        = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api/latest`)"
-  middlewares = ["cors", "replace-api-path", "redirect-api-regex", "replace-lts-path"]
+  middlewares = ["cors", "replace-api", "redirect-api", "replace-lts"]
   service     = "backend-latest"
   entryPoints = ["web", "websecure"]
 [http.routers.backend-latest.tls]
   certresolver = "resolver0"
 [http.routers.backend-v1]
   rule        = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api/v1`)"
-  middlewares = ["cors", "replace-api-path", "redirect-api-regex", "replace-v1-path"]
+  middlewares = ["cors", "replace-api", "redirect-api", "replace-v1"]
   service     = "backend-v1"
   entryPoints = ["web", "websecure"]
 [http.routers.backend-v1.tls]
@@ -35,17 +35,17 @@
   accessControlExposeHeaders   = "*"
   accessControlMaxAge          = "100"
   addVaryHeader                = true
-[http.middlewares.replace-api-path.replacePathRegex]
+[http.middlewares.replace-api.replacePathRegex]
   regex       = "^/api/(.*)"
   replacement = "/$1"
-[http.middlewares.redirect-api-regex.redirectRegex]
+[http.middlewares.redirect-api.redirectRegex]
   regex       = "^(.*)/api$$"
   replacement = "$1/api/"
   permanent   = true
-[http.middlewares.replace-lts-path.replacePathRegex]
+[http.middlewares.replace-lts.replacePathRegex]
   regex       = "^/latest/(.*)"
   replacement = "/$1"
-[http.middlewares.replace-v1-path.replacePathRegex]
+[http.middlewares.replace-v1.replacePathRegex]
   regex       = "^/v1/(.*)"
   replacement = "/$1"
 
