@@ -14,14 +14,14 @@
   certresolver = "resolver0"
 [http.routers.backend-latest]
   rule        = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api/latest`)"
-  middlewares = ["replace-api-path", "redirect-api-regex", "replace-lts-path"]
+  middlewares = ["cors", "replace-api-path", "redirect-api-regex", "replace-lts-path"]
   service     = "backend-latest"
   entryPoints = ["web", "websecure"]
 [http.routers.backend-latest.tls]
   certresolver = "resolver0"
 [http.routers.backend-v1]
   rule        = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api/v1`)"
-  middlewares = ["replace-api-path", "redirect-api-regex", "replace-v1-path"]
+  middlewares = ["cors", "replace-api-path", "redirect-api-regex", "replace-v1-path"]
   service     = "backend-v1"
   entryPoints = ["web", "websecure"]
 [http.routers.backend-v1.tls]
