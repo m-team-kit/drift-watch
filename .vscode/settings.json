@@ -14,7 +14,13 @@
     "evenBetterToml.formatter.indentEntries": true,
     "evenBetterToml.formatter.alignEntries": true,
     "cSpell.words": [
+        "accesscontrolallowheaders",
+        "accesscontrolallowmethods",
+        "accesscontrolalloworiginlist",
+        "accesscontrolmaxage",
+        "addvaryheader",
         "argnames",
+        "certresolver",
         "dateiso",
         "datetime",
         "healthcheck",
@@ -24,6 +30,7 @@
         "mytoken",
         "redirections",
         "traefik",
+        "websecure",
         "werkzeug"
     ]
 }
