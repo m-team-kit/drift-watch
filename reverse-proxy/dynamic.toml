@@ -30,7 +30,7 @@
 # Middlewares -------------------------------------------------------
 [http.middlewares.cors.headers]
   accessControlAllowMethods    = "GET,OPTIONS,PUT,POST,PATCH,DELETE"
-  accessControlAllowOriginList = "{{ env `CORS_ORIGINS` }}"
+  accessControlAllowOriginList = "*"
   accessControlAllowHeaders    = "*"
   accessControlExposeHeaders   = "*"
   accessControlMaxAge          = "100"
