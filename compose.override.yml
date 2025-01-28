@@ -40,7 +40,7 @@ services:
     restart: unless-stopped
     environment:
       FLASK_DEBUG: 1
-      APP_DATABASE_NAME: ${APP_DATABASE_NAME:-dev-data}
+      APP_DATABASE_NAME: ${APP_DATABASE_NAME:-demo-data}
     build:
       target: development
     ports:
@@ -53,7 +53,7 @@ services:
     restart: unless-stopped
     environment:
       FLASK_DEBUG: 1
-      APP_DATABASE_NAME: ${APP_DATABASE_NAME:-dev-data}
+      APP_DATABASE_NAME: ${APP_DATABASE_NAME:-demo-data}
     build:
       target: production
     ports:
@@ -64,7 +64,7 @@ services:
   database:
     restart: unless-stopped
     environment:
-      MONGO_INITDB_DATABASE: ${APP_DATABASE_NAME:-dev-data}
+      MONGO_INITDB_DATABASE: ${APP_DATABASE_NAME:-demo-data}
     ports:
       - "27017:27017"
     volumes:

@@ -23,7 +23,7 @@ def db_client():
 @fixture(scope="session")
 def db(db_client):
     """Return the database."""
-    return db_client["test-data"]
+    return db_client["demo-data"]
 
 
 @fixture(scope="session")
