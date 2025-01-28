@@ -5,8 +5,11 @@ services:
     environment:
       TRAEFIK_LOG_LEVEL: "DEBUG"
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      TRAEFIK_API_DASHBOARD: "true"
+      TRAEFIK_API_INSECURE: "true"
     ports:
       - "8082:8082"
+      - "8080:8080"
     volumes:
       - ./letsencrypt:/letsencrypt
 
