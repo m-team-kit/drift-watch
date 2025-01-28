@@ -4,6 +4,7 @@ services:
     image: traefik:${APP_TRAEFIK_VERSION-v3.2}
     environment:
       DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
+      CORS_ORIGINS: ${APP_CORS_ORIGINS:?}
       TRAEFIK_API_INSECURE: "true"
       TRAEFIK_ENTRYPOINTS_WEB_ADDRESS: ":80"
       TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS: ":443"
@@ -39,6 +40,7 @@ services:
   backend-latest:
     environment:
       APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api/latest"}] }'
+      # APP_CORS_ORIGINS: "[https://${APP_DOMAIN_NAME:?}]"
       APP_API_VERSION: latest
       APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
       APP_DATABASE_HOST: database
@@ -56,6 +58,7 @@ services:
   backend-v1:
     environment:
       APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api/v1"}] }'
+      # APP_CORS_ORIGINS: "[https://${APP_DOMAIN_NAME:?}]"
       APP_API_VERSION: v1
       APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
       APP_DATABASE_HOST: database
