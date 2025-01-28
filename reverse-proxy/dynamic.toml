@@ -6,10 +6,10 @@
 [http.routers.frontend.tls]
   certresolver = "resolver0"
 [http.routers.swagger-ui]
-  entryPoints = ["web", "websecure"]
   rule        = "Host(`{{ env `DOMAIN_NAME` }}`) && PathPrefix(`/api`)"
   middlewares = ["cors", "replace-api-path", "redirect-api-regex"]
   service     = "swagger-ui"
+  entryPoints = ["web", "websecure"]
 [http.routers.swagger-ui.tls]
   certresolver = "resolver0"
 [http.routers.backend-latest]
