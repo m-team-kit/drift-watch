@@ -68,6 +68,8 @@ services:
 
   database:
     restart: always
+    environment:
+      MONGO_INITDB_DATABASE: test-data
     volumes:
       - ./sandbox/load-database.sh:/docker-entrypoint-initdb.d/load-db.sh:ro
       - ./sandbox/database:/tmp/database
