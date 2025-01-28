@@ -24,13 +24,13 @@ services:
 
   frontend:
     restart: always
-    build:
-      target: production
     environment:
       DRIFT_MONITOR_SCHEME: https
       DRIFT_MONITOR_HOST: ${APP_DOMAIN_NAME:?}
       DRIFT_MONITOR_PORT: 443
       DRIFT_MONITOR_VERSION: latest
+    build:
+      target: production
     depends_on:
       backend-latest:
         condition: service_healthy

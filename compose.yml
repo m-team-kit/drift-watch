@@ -37,8 +37,6 @@ services:
       - backend-latest
 
   backend-latest:
-    build:
-      context: backend
     environment:
       APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api/latest"}] }'
       APP_API_VERSION: latest
@@ -47,6 +45,8 @@ services:
       APP_SECRETS_DIR: /run/secrets
       APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
       APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
+    build:
+      context: backend
     depends_on:
       - database
     secrets:
@@ -54,8 +54,6 @@ services:
         target: app_database_password
 
   backend-v1:
-    build:
-      context: backend # Change to backend_v1 submodule with v~=1
     environment:
       APP_API_SPEC_OPTIONS: '{ "servers": [{"url": "/api/v1"}] }'
       APP_API_VERSION: v1
@@ -64,6 +62,8 @@ services:
       APP_SECRETS_DIR: /run/secrets
       APP_ADMIN_ENTITLEMENTS: ${APP_ADMIN_ENTITLEMENTS:?}
       APP_TRUSTED_OP_LIST: ${APP_TRUSTED_OP_LIST:?}
+    build:
+      context: backend # Change to backend_v1 submodule with v~=1
     depends_on:
       - database
     secrets:
