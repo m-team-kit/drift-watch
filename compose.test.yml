@@ -2,6 +2,13 @@
 services:
   testing:
     restart: no
+    environment:
+      TESTING: "true" # Client accept self-signed certificates
+      APP_DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
+      APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
+      APP_DATABASE_HOST: database
+      DRIFT_MONITOR_URL: ${DRIFT_MONITOR_URL:-https://reverse-proxy}
+      DRIFT_MONITOR_MYTOKEN: ${DRIFT_MONITOR_MYTOKEN:?}   
     build:
       dockerfile: Dockerfile.test
     depends_on:
@@ -14,17 +21,12 @@ services:
       backend-v1:
         condition: service_healthy
     network_mode: "host"
-    environment:
-      TESTING: "true" # Client accept self-signed certificates
-      APP_DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
-      APP_DATABASE_USERNAME: ${APP_DATABASE_USERNAME:-user-default}
-      APP_DATABASE_HOST: database
-      DRIFT_MONITOR_URL: ${DRIFT_MONITOR_URL:-https://reverse-proxy}
-      DRIFT_MONITOR_MYTOKEN: ${DRIFT_MONITOR_MYTOKEN:?}
+
 
   reverse-proxy:
     restart: no
     environment:
+      CORS_ORIGINS: "['${APP_DOMAIN_NAME}', 'http://localhost:3001']"
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO: "websecure"
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: "https"

@@ -3,6 +3,7 @@ services:
   reverse-proxy:
     restart: unless-stopped
     environment:
+      CORS_ORIGINS: "['${APP_DOMAIN_NAME}', 'http://localhost:3001']"
       TRAEFIK_LOG_LEVEL: "DEBUG"
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
       TRAEFIK_API_DASHBOARD: "true"

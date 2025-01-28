@@ -2,6 +2,7 @@
 services:
   reverse-proxy:
     environment:
+      CORS_ORIGINS: "['${APP_DOMAIN_NAME}', 'http://localhost:3001']"
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO: "websecure"
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: "https"
     volumes:
