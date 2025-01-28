@@ -29,11 +29,12 @@
 
 # Middlewares -------------------------------------------------------
 [http.middlewares.cors.headers]
-  accesscontrolallowmethods    = "GET,OPTIONS,PUT,POST,PATCH,DELETE"
-  accesscontrolallowheaders    = "*"
-  accesscontrolalloworiginlist = "{{ env `CORS_ORIGINS` }}"
-  accesscontrolmaxage          = "100"
-  addvaryheader                = true
+  accessControlAllowMethods    = "GET,OPTIONS,PUT,POST,PATCH,DELETE"
+  accessControlAllowOriginList = "{{ env `CORS_ORIGINS` }}"
+  accessControlAllowHeaders    = "*"
+  accessControlExposeHeaders   = "*"
+  accessControlMaxAge          = "100"
+  addVaryHeader                = true
 [http.middlewares.replace-api-path.replacePathRegex]
   regex       = "^/api/(.*)"
   replacement = "/$1"
