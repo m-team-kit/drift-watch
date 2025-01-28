@@ -1,7 +1,7 @@
 # See: https://docs.docker.com/compose/multiple-compose-files/merge/
 services:
   reverse-proxy:
-    image: traefik:${APP_TRAEFIK_VERSION-v3.0}
+    image: traefik:${APP_TRAEFIK_VERSION-v3.2}
     environment:
       DOMAIN_NAME: ${APP_DOMAIN_NAME:?}
       TRAEFIK_API_INSECURE: "true"
