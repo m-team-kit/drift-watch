@@ -41,6 +41,8 @@ services:
 
   backend-latest:
     restart: always
+    environment:
+      APP_DATABASE_NAME: ${APP_DATABASE_NAME:-demo-data}
     build:
       target: production
     depends_on:
@@ -53,6 +55,8 @@ services:
 
   backend-v1:
     restart: always
+    environment:
+      APP_DATABASE_NAME: ${APP_DATABASE_NAME:-demo-data}
     build:
       target: production
     depends_on:
@@ -69,7 +73,7 @@ services:
   database:
     restart: always
     environment:
-      MONGO_INITDB_DATABASE: test-data
+      MONGO_INITDB_DATABASE: ${APP_DATABASE_NAME:-demo-data}
     volumes:
       - ./sandbox/load-database.sh:/docker-entrypoint-initdb.d/load-db.sh:ro
       - ./sandbox/database:/tmp/database
