@@ -26,7 +26,7 @@ services:
   reverse-proxy:
     restart: no
     environment:
-      CORS_ORIGINS: "${APP_DOMAIN_NAME},http://localhost:3001"
+      CORS_ORIGINS: "https://${APP_DOMAIN_NAME},http://localhost:3001"
       TRAEFIK_CERTIFICATESRESOLVERS_RESOLVER0_ACME_CASERVER: "https://acme-staging-v02.api.letsencrypt.org/directory"
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO: "websecure"
       TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME: "https"
