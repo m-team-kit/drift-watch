@@ -35,23 +35,6 @@ services:
       start_interval: 1s
       start_period: 10s
 
-  frontend:
-    restart: no
-    build:
-      target: production
-    environment:
-      DRIFT_MONITOR_SCHEME: https
-      DRIFT_MONITOR_HOST: ${APP_DOMAIN_NAME:?}
-      DRIFT_MONITOR_PORT: 443
-      DRIFT_MONITOR_VERSION: latest
-    depends_on:
-      backend-latest:
-        condition: service_healthy
-    healthcheck:
-      test: "curl -X GET --fail localhost:8501"
-      start_interval: 1s
-      start_period: 10s
-
   backend-latest:
     restart: no
     build:
