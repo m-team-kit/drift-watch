@@ -6,4 +6,4 @@
 	url = git@github.com:m-team-kit/drift-watch-client.git
 [submodule "frontend"]
 	path = frontend
-	url = git@github.com:m-team-kit/drift-watch-frontend.git
+	url = git@github.com:m-team-kit/drift-watch-gui-react.git

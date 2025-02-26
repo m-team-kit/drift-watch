@@ -52,7 +52,7 @@
 # Services ----------------------------------------------------------
 [http.services.frontend.loadBalancer]
 [[http.services.frontend.loadBalancer.servers]]
-  url = "http://frontend:8501"
+  url = "http://frontend:80"
 [http.services.swagger-ui.loadBalancer]
 [[http.services.swagger-ui.loadBalancer.servers]]
   url = "http://swagger-ui:8080"
