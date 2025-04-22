@@ -34,20 +34,5 @@
                 }
             ]
         },
-        {
-            "name": "Python Debugger: Frontend - docker",
-            "type": "debugpy",
-            "request": "attach",
-            "connect": {
-                "host": "localhost",
-                "port": 5679
-            },
-            "pathMappings": [
-                {
-                    "localRoot": "${workspaceFolder}/frontend",
-                    "remoteRoot": "/srv"
-                }
-            ]
-        },
     ]
 }
