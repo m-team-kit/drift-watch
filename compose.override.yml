@@ -22,6 +22,11 @@ services:
          {"name": "HTTPS-v1", "url": "https://${APP_DOMAIN_NAME:?}/api/v1/specification.json"}
         ]
 
+  frontend:
+    restart: unless-stopped
+    build:
+      target: development
+
   backend-latest:
     restart: unless-stopped
     environment:

@@ -30,15 +30,13 @@ services:
       - backend-v1
 
   frontend:
-    restart: always
     build:
       context: frontend
-      target: static
       args:
         OIDC_CLIENT_ID: ${UI_CLIENT_ID}
         HOSTNAME: ${APP_DOMAIN_NAME}
-        OIDC_SCOPES: ${UI_SCOPES}
         OIDC_AUTHORITY: ${UI_AUTHORITY}
+        API_BASEPATH: ${API_BASEPATH:-/api/latest}
     depends_on:
       - backend-latest
 

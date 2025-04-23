@@ -23,6 +23,11 @@ services:
       reverse-proxy:
         condition: service_healthy
 
+  frontend:
+    restart: always
+    build:
+      target: production
+
   backend-latest:
     restart: always
     build:
