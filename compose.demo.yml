@@ -63,6 +63,8 @@ services:
     restart: always
     environment:
       MONGO_INITDB_DATABASE: ${APP_DATABASE_NAME:-demo-data}
+    ports:
+      - "27017:27017"
     volumes:
       - ./sandbox/load-database.sh:/docker-entrypoint-initdb.d/load-db.sh:ro
       - ./sandbox/database:/tmp/database
