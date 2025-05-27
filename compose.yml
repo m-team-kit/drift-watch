@@ -33,10 +33,16 @@ services:
     build:
       context: frontend
       args:
-        OIDC_CLIENT_ID: ${UI_CLIENT_ID}
         HOSTNAME: ${APP_DOMAIN_NAME}
+        OIDC_CLIENT_ID: ${UI_CLIENT_ID}
         OIDC_AUTHORITY: ${UI_AUTHORITY}
+        OIDC_SCOPES: ${UI_SCOPES:-"openid profile email basic roles web-origins"}
         API_BASEPATH: ${API_BASEPATH:-/api/latest}
+        DOCS_URL: ${DOCS_URL:?Missing documentation URL}
+        GITHUB_URL: ${GITHUB_URL:?Missing GitHub URL}
+        TERMS_USE_URL: ${TERMS_USE_URL:?Missing Acceptable Use Policy URL}
+        PRIVACY_POLICY_URL: ${PRIVACY_POLICY_URL:?Missing Privacy Policy URL}
+        LEGALS_URL: ${LEGALS_URL:?Missing Legals URL}
     depends_on:
       - backend-latest
 
